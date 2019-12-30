@@ -1,0 +1,22 @@
+{
+    "name": "moehrenzahn/scripturekit",
+    "description": "ScriptureKit PHP",
+    "authors": [
+        {
+            "name": "Max Melzer",
+            "email": "max.melzer@moehrenzahn.de"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "src\\": "Moehrenzahn\\ScriptureKit",
+            "test\\": "Moehrenzahn\\ScriptureKit\\Test"
+        }
+    }
+}
