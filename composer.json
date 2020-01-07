@@ -8,15 +8,17 @@
         }
     ],
     "require": {
-        "php": "^7.2"
+        "php": "^7.2",
+        "ext-simplexml": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {
-            "src\\": "Moehrenzahn\\ScriptureKit",
-            "test\\": "Moehrenzahn\\ScriptureKit\\Test"
+            "Moehrenzahn\\ScriptureKit\\": "src/",
+            "Moehrenzahn\\ScriptureKit\\Test\\": "test/"
         }
     }
 }

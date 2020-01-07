@@ -1,0 +1,9 @@
+<?php
+use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
+/** @var ScripturePiece $view */
+?>
+<span
+    class="highlight <?php echo implode(' ', $view->getAttributes()); ?>"
+    data-versenumber="<?php echo $view->getPieceId(); ?>">
+    <?php echo $view->getContent(); ?>
+</span>
