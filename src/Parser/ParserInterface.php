@@ -41,10 +41,14 @@ interface ParserInterface
         int $chapter
     ): array;
 
+    public function loadTitle(string $filePath): string;
+
+    public function loadLanguageCode(string $filePath): string;
+
     /**
      * @param string $filePath
      *
      * @return string[]
      */
-    public function loadVersionDetails(string $filePath);
+    public function loadVersionDetails(string $filePath): array;
 }

@@ -31,13 +31,21 @@ class VerseRenderer
 
     public function render(VerseRequest $verseRequest, Version $version): RenderedVerse
     {
+        $errors = [];
+
         $compactReference = $this->referenceRenderer->getShortReference($verseRequest);
         $reference = $this->referenceRenderer->getMediumReference($verseRequest);
         $fullReference = $this->referenceRenderer->getLongReference($verseRequest);
 
+        if (!$compactReference || !$fullReference || !$reference) {
+            $errors[] = 'Verse reference not available';
+        }
         $bookName = $this->getBookName($verseRequest, $version);
         $chapterName = $this->getChapterName($verseRequest, $version);
         $text = $this->verseTextRenderer->render($verseRequest, $version);
+        if (!$text) {
+            $errors[] = 'Verse is not available';
+        }
 
         return new RenderedVerse(
             $verseRequest,
@@ -48,31 +56,8 @@ class VerseRenderer
             $compactReference,
             $reference,
             $fullReference,
-            []
+            $errors
         );
-    }
-
-    /**
-     * Note: This will not add textOriginal or readingUrl keys.
-     *
-     * @param RenderedVerse $renderedVerse
-     *
-     * @return array
-     */
-    public function toJson(RenderedVerse $renderedVerse): array
-    {
-        $verse = $renderedVerse->getVerseRequest();
-
-        return [
-            'book' => $renderedVerse->getBookName(),
-            'bookNumber' => $verse->getBookNumber(),
-            'chapter' => $verse->getChapter(),
-            'verses' => $verse->getVerses(),
-            'text' => $renderedVerse->getText(),
-            'version' => $renderedVerse->getVersion(),
-            'collection' => $verse->getCollection(),
-            'reference' => $renderedVerse->getFullReference(),
-        ];
     }
 
     private function getBookName(VerseRequest $verseRequest, Version $version): string

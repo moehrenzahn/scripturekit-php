@@ -11,11 +11,20 @@ and [qurandatabase.org](http://qurandatabase.org).
 ## Usage
 
 ```php
-$requestBuilder = new \Moehrenzahn\ScriptureKit\VerseRequestBuilder();
-$request = $requestBuilder->build();
-$verseFactory = new \Moehrenzahn\ScriptureKit\VerseFactory();
-$verse = $verseFactory->createAndRender($request);
+$version = new \Moehrenzahn\ScriptureKit\Data\Version($filePath, $type, $availableCollections);
 
+$verseRequestBuilder = new \Moehrenzahn\ScriptureKit\VerseRequestBuilder($chapterNumber, $verseNumbers, $collection);
+$verseRequestBuilder->setBookNumber($bookNumber);
+$verseRequestBuilder->setHighlightedVerses([2,3]);
+$verseRequestBuilder->setReturnHtml(true);
+
+$service = new \Moehrenzahn\ScriptureKit\Service($version);
+
+$verse = $service->createVerse($verseRequestBuilder->build());
+
+$detailedVersion = $service->createDetailedVersion();
+
+echo $detailedVersion->getTitle();
 echo $verse->getText();
 ```
 

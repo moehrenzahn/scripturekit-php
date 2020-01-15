@@ -3,9 +3,9 @@
 namespace Moehrenzahn\ScriptureKit\Data;
 
 /**
- * Class RenderedVersion
+ * Class DetailedVersion
  */
-class RenderedVersion
+class DetailedVersion
 {
     /**
      * @var Version
@@ -15,12 +15,12 @@ class RenderedVersion
     /**
      * @var string
      */
-    private $name;
+    private $title;
 
     /**
-     * @var int[]
+     * @var string
      */
-    private $collections;
+    private $languageCode;
 
     /**
      * @var string[]
@@ -31,15 +31,15 @@ class RenderedVersion
      * RenderedVersion constructor.
      *
      * @param Version  $version
-     * @param string   $name
-     * @param int[]    $collections
+     * @param string   $title
      * @param string[] $details
+     * @param string   $languageCode
      */
-    public function __construct(Version $version, string $name, array $collections, array $details)
+    public function __construct(Version $version, string $title, string $languageCode, array $details)
     {
         $this->version = $version;
-        $this->name = $name;
-        $this->collections = $collections;
+        $this->title = $title;
+        $this->languageCode = $languageCode;
         $this->details = $details;
     }
 
@@ -54,17 +54,17 @@ class RenderedVersion
     /**
      * @return string
      */
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * @return int[]
+     * @return string
      */
-    public function getCollections(): array
+    public function getLanguageCode(): string
     {
-        return $this->collections;
+        return $this->languageCode;
     }
 
     /**

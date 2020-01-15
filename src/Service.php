@@ -3,6 +3,7 @@
 namespace Moehrenzahn\ScriptureKit;
 
 use Moehrenzahn\ScriptureKit\Data\RenderedVerse;
+use Moehrenzahn\ScriptureKit\Data\DetailedVersion;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Data\Version;
 use Moehrenzahn\ScriptureKit\Parser\QuranParser;
@@ -13,18 +14,26 @@ use Moehrenzahn\ScriptureKit\Renderer\ScripturePieceRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\VerseRangeRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\VerseRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\VerseTextRenderer;
+use Moehrenzahn\ScriptureKit\Renderer\VersionRenderer;
 
 /**
- * Class VerseFactory
+ * Class Service
+ *
+ * The main entry point to ScriptureKit.
  *
  * @api
  */
-class VerseFactory
+class Service
 {
     /**
      * @var Version
      */
     private $version;
+
+    /**
+     * @var VersionRenderer
+     */
+    private $versionRenderer;
 
     /**
      * @var VerseRenderer
@@ -36,6 +45,12 @@ class VerseFactory
      */
     private $verseHtmlRenderer;
 
+    /**
+     * Service constructor.
+     *
+     * @param Version $version Create this object via `new Version(...)`
+     *                         with the details of the xml version you want to use
+     */
     public function __construct(Version $version)
     {
         $this->version = $version;
@@ -47,6 +62,8 @@ class VerseFactory
         } else {
             $parser = new ZefaniaParser(new XMLParser());
         }
+
+        $this->versionRenderer = new VersionRenderer($parser);
 
         $this->verseRenderer = new VerseRenderer(
             new ReferenceRenderer(
@@ -68,7 +85,12 @@ class VerseFactory
         );
     }
 
-    public function create(VerseRequest $verseRequest): RenderedVerse
+    /**
+     * @param VerseRequest $verseRequest Create via \Moehrenzahn\ScriptureKit\VerseRequestBuilder::build
+     *
+     * @return RenderedVerse
+     */
+    public function createVerse(VerseRequest $verseRequest): RenderedVerse
     {
         if ($verseRequest->isReturnHtml()) {
             return $this->verseHtmlRenderer->render(
@@ -81,5 +103,13 @@ class VerseFactory
                 $this->version
             );
         }
+    }
+
+    /**
+     * @return DetailedVersion
+     */
+    public function createDetailedVersion(): DetailedVersion
+    {
+        return $this->versionRenderer->render($this->version);
     }
 }

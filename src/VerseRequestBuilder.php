@@ -116,6 +116,12 @@ class VerseRequestBuilder
         $this->highlightedVerses = $highlightedVerses;
     }
 
+    /**
+     * Use this method to create the request after setting
+     * all desired optional parameters via the setter methods.
+     *
+     * @return VerseRequest
+     */
     public function build(): Data\VerseRequest
     {
         if ($this->collection !== VerseRequest::COLLECTION_QURAN && is_null($this->bookNumber)) {

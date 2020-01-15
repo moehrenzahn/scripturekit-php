@@ -124,15 +124,29 @@ class QuranParser implements ParserInterface
     {
         $xml = $this->xmlParser->getXMLObject($filePath);
         $result = [
-            'writer'   => $xml['Writer'],
-            'language' => $xml['Language'],
-            'source'   => 'qurandatabase.org',
+            'author'   => $xml['Writer'] ?? '',
+            'language' => $xml['Language'] ?? '',
+            'languageCode' => $xml['LanguageIsoCode'] ?? '',
         ];
         foreach ($result as &$item) {
             $item = trim((string)$item);
         }
 
         return array_filter($result);
+    }
+
+    public function loadTitle(string $filePath): string
+    {
+        $xml = $this->xmlParser->getXMLObject($filePath);
+
+        return trim((string) ($xml['Writer'] ?? ''));
+    }
+
+    public function loadLanguageCode(string $filePath): string
+    {
+        $xml = $this->xmlParser->getXMLObject($filePath);
+
+        return trim((string) ($xml['LanguageIsoCode'] ?? ''));
     }
 
     /**

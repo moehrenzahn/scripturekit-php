@@ -3,7 +3,6 @@
 namespace Moehrenzahn\ScriptureKit\Parser;
 
 use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
-use Moehrenzahn\ScriptureKit\Util\StringHelper;
 use RuntimeException;
 use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
 use SimpleXMLElement;
@@ -135,7 +134,7 @@ class ZefaniaParser implements ParserInterface
      *
      * @return string[]
      */
-    public function loadVersionDetails(string $filePath)
+    public function loadVersionDetails(string $filePath): array
     {
         $xml = $this->xmlParser->getXMLObject($filePath);
         $result = [
@@ -151,6 +150,22 @@ class ZefaniaParser implements ParserInterface
         }
 
         return array_filter($result);
+    }
+
+    public function loadTitle(string $filePath): string
+    {
+        $xml = $this->xmlParser->getXMLObject($filePath);
+
+
+        return trim((string) ($xml->INFORMATION->title[0] ?? ''));
+    }
+
+
+    public function loadLanguageCode(string $filePath): string
+    {
+        $xml = $this->xmlParser->getXMLObject($filePath);
+
+        return trim((string) ($xml->INFORMATION->language[0] ?? ''));
     }
 
     /**

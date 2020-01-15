@@ -4,11 +4,11 @@ namespace Moehrenzahn\ScriptureKit\Test;
 
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Data\Version;
-use Moehrenzahn\ScriptureKit\VerseFactory;
+use Moehrenzahn\ScriptureKit\Service;
 use Moehrenzahn\ScriptureKit\VerseRequestBuilder;
 use PHPUnit\Framework\TestCase;
 
-class VerseFactoryIntegrationTest extends TestCase
+class ServiceIntegrationTest extends TestCase
 {
     public function provider(): array
     {
@@ -84,6 +84,7 @@ class VerseFactoryIntegrationTest extends TestCase
                 'verses' => [2],
                 'highlightedVerses' => [],
                 'returnHtml' => false,
+
                 'expectedText' => 'Praise belongs to God, the Lord of all Being.'
             ],
             'quran single verse html' => [
@@ -105,16 +106,35 @@ class VerseFactoryIntegrationTest extends TestCase
         ];
     }
 
+    public function versionDataProvider(): array
+    {
+        return [
+            'zefania' => [
+                'versionPath' => __DIR__ . '/files/World English Bible.xml',
+                'versionType' => Version::TYPE_BIBLE,
+                'expectedTitle' => 'World English Bible',
+                'expectedLanguageCode' => 'eng',
+
+            ],
+            'qurandatabase' => [
+                'versionPath' => __DIR__ . '/files/A. J. Arberry.xml',
+                'versionType' => Version::TYPE_QURAN,
+                'expectedTitle' => 'A. J. Arberry',
+                'expectedLanguageCode' => 'eng',
+            ]
+        ];
+    }
+
     /**
      * @dataProvider provider
      */
-    public function testCreate(string $versionPath, int $versionType, int $collection, ?int $book, int $chapter, array $verses, array $highlightedVerses, bool $returnHtml, $expectedText)
+    public function testCreateVerse(string $versionPath, int $versionType, int $collection, ?int $book, int $chapter, array $verses, array $highlightedVerses, bool $returnHtml, $expectedText)
     {
         $versionName = 'Test Version Name';
         $versionAvailableCollections = [$collection];
 
         $version = new Version($versionName, $versionPath, $versionType, $versionAvailableCollections);
-        $verseFactory = new VerseFactory($version);
+        $subject = new Service($version);
 
         $verseRequestBuilder = new VerseRequestBuilder($chapter, $verses, $collection);
         $verseRequestBuilder->setBookNumber($book);
@@ -123,11 +143,37 @@ class VerseFactoryIntegrationTest extends TestCase
 
         $request = $verseRequestBuilder->build();
 
-        $verse = $verseFactory->create($request);
+        $verse = $subject->createVerse($request);
 
         self::assertSame(
             $expectedText,
             $verse->getText()
         );
+    }
+
+    /**
+     * @dataProvider versionDataProvider
+     */
+    public function testCreateVersion(string $versionPath, int $versionType, string $expectedTitle, string $expectedLanguageCode)
+    {
+        $versionName = 'Test Version Name';
+        $versionAvailableCollections = [];
+
+        $version = new Version($versionName, $versionPath, $versionType, $versionAvailableCollections);
+
+        $subject = new Service($version);
+
+        $detailedVersion = $subject->createDetailedVersion();
+
+        self::assertSame(
+            $expectedTitle,
+            $detailedVersion->getTitle()
+        );
+        self::assertSame(
+            $expectedLanguageCode,
+            $detailedVersion->getLanguageCode()
+        );
+
+        print_r($detailedVersion);
     }
 }
