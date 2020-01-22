@@ -71,7 +71,7 @@ class VerseTextRenderer implements VerseTextRendererInterface
             /** @var ScripturePiece $piece */
             $piece = array_shift($pieces);
             if ($this->startsSentence($piece) && !$sentenceInProgress) {
-                $result[] = new ScripturePiece(ScripturePiece::TYPE_LINEBREAK, '', '', []);
+                $result[] = new ScripturePiece(ScripturePiece::TYPE_LINEBREAK, 0, '', []);
                 $sentenceInProgress = true;
             }
             if ($this->endsSentence($piece)) {

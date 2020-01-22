@@ -46,7 +46,7 @@ class StringHelper
      * @param string $string
      * @return string
      */
-    public static function trailingCommaToString(string $string): string
+    public static function trailingCommaToPeriod(string $string): string
     {
         if (mb_substr($string, -1) === ',') {
             $string = rtrim($string, ',') . '.';

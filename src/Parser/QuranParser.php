@@ -106,7 +106,7 @@ class QuranParser implements ParserInterface
         if (!$xmlElements) {
             throw new RuntimeException(
                 sprintf(
-                    'Quran chapter %s is not included in this bible version.',
+                    'Quran chapter %s is not included in this version.',
                     $chapter
                 )
             );

@@ -5,6 +5,8 @@ namespace Moehrenzahn\ScriptureKit\Renderer;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
 use Moehrenzahn\ScriptureKit\Util\QuranChapterNames;
+use Moehrenzahn\ScriptureKit\Util\TanakhBookNames;
+use RuntimeException;
 
 class ReferenceRenderer implements ReferenceRendererInterface
 {
@@ -44,7 +46,21 @@ class ReferenceRenderer implements ReferenceRendererInterface
         $result = '';
 
         if ($book = $verseRequest->getBookNumber()) {
-            $result .= $book;
+            switch ($verseRequest->getCollection()) {
+                case VerseRequest::COLLECTION_TANAKH:
+                    $bookName = TanakhBookNames::getBookName($book);
+                    break;
+                case VerseRequest::COLLECTION_NT:
+                case VerseRequest::COLLECTION_OT:
+                    $bookName = BibleBookNames::getBookName($book);
+                    break;
+            }
+            if (!isset($bookName)) {
+                throw new RuntimeException('This book is not available in this collection.');
+            }
+
+            $result .= $bookName;
+
 
             if ($withAltName) {
                 if ($verseRequest->getCollection() === VerseRequest::COLLECTION_TANAKH) {
@@ -63,19 +79,17 @@ class ReferenceRenderer implements ReferenceRendererInterface
             $result .= $chapterName . ' ';
             if ($withAltName) {
                 $altName = 'Surah ' . $verseRequest->getChapter();
-                $result .= '(' . $altName . ')';
+                $result .= '(' . $altName . ') ';
             }
         } else {
             $result .= $verseRequest->getChapter();
         }
 
-        if (!empty($this->verses)) {
-            if (isset($chapterName)) {
-                $result .= ' ';
-            } else {
+        if (!empty($verseRequest->getVerses())) {
+            if (!isset($chapterName)) {
                 $result .= ':';
             }
-            $result .= $this->verseRangeRenderer->render($this->verses);
+            $result .= $this->verseRangeRenderer->render($verseRequest->getVerses());
         }
 
         return $result;

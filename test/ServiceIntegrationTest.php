@@ -22,7 +22,8 @@ class ServiceIntegrationTest extends TestCase
                 'verses' => [1,2],
                 'highlightedVerses' => [2],
                 'returnHtml' => false,
-                'expectedText' => 'Paul, a servant of Jesus Christ, called to be an apostle, set apart for the gospel of God, which he promised before through his prophets in the holy scriptures,'
+                'expectedLongReference' => 'Romans 1:1–2',
+                'expectedText' => 'Paul, a servant of Jesus Christ, called to be an apostle, set apart for the gospel of God, which he promised before through his prophets in the holy scriptures.'
             ],
             'new testament html' => [
                 'versionPath' => __DIR__ . '/files/World English Bible.xml',
@@ -33,6 +34,7 @@ class ServiceIntegrationTest extends TestCase
                 'verses' => [1,2],
                 'highlightedVerses' => [2],
                 'returnHtml' => true,
+                'expectedLongReference' => 'Romans 1:1–2',
                 'expectedText' => '<p>
 <span
     class="1"
@@ -41,7 +43,7 @@ class ServiceIntegrationTest extends TestCase
 <span
     class="highlight 2"
     data-versenumber="2">
-    which he promised before through his prophets in the holy scriptures,</span>
+    which he promised before through his prophets in the holy scriptures.</span>
 </p>'
             ],
             'quran text' => [
@@ -53,7 +55,8 @@ class ServiceIntegrationTest extends TestCase
                 'verses' => [1,2],
                 'highlightedVerses' => [2],
                 'returnHtml' => false,
-                'expectedText' => 'In the Name of God, the Merciful, the Compassionate Praise belongs to God, the Lord of all Being,'
+                'expectedLongReference' => 'Al-Fatihah (Surah 1) 1–2',
+                'expectedText' => 'In the Name of God, the Merciful, the Compassionate Praise belongs to God, the Lord of all Being.'
             ],
             'quran html' => [
                 'versionPath' => __DIR__ . '/files/A. J. Arberry.xml',
@@ -64,6 +67,7 @@ class ServiceIntegrationTest extends TestCase
                 'verses' => [1,2],
                 'highlightedVerses' => [2],
                 'returnHtml' => true,
+                'expectedLongReference' => 'Al-Fatihah <span class=\'name-alt\'>(Surah 1)</span> 1–2',
                 'expectedText' => '<p>
 <span
     class="1"
@@ -72,7 +76,7 @@ class ServiceIntegrationTest extends TestCase
 <span
     class="highlight 2"
     data-versenumber="2">
-    Praise belongs to God, the Lord of all Being,</span>
+    Praise belongs to God, the Lord of all Being.</span>
 </p>'
             ],
             'quran single verse text' => [
@@ -84,7 +88,7 @@ class ServiceIntegrationTest extends TestCase
                 'verses' => [2],
                 'highlightedVerses' => [],
                 'returnHtml' => false,
-
+                'expectedLongReference' => 'Al-Fatihah (Surah 1) 2',
                 'expectedText' => 'Praise belongs to God, the Lord of all Being.'
             ],
             'quran single verse html' => [
@@ -96,6 +100,7 @@ class ServiceIntegrationTest extends TestCase
                 'verses' => [2],
                 'highlightedVerses' => [],
                 'returnHtml' => true,
+                'expectedLongReference' => 'Al-Fatihah <span class=\'name-alt\'>(Surah 1)</span> 2',
                 'expectedText' => '<p>
 <span
     class="2"
@@ -128,8 +133,18 @@ class ServiceIntegrationTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testCreateVerse(string $versionPath, int $versionType, int $collection, ?int $book, int $chapter, array $verses, array $highlightedVerses, bool $returnHtml, $expectedText)
-    {
+    public function testCreateVerse(
+        string $versionPath,
+        int $versionType,
+        int $collection,
+        ?int $book,
+        int $chapter,
+        array $verses,
+        array $highlightedVerses,
+        bool $returnHtml,
+        string $expectedLongReference,
+        string $expectedText
+    ) {
         $versionName = 'Test Version Name';
         $versionAvailableCollections = [$collection];
 
@@ -148,6 +163,11 @@ class ServiceIntegrationTest extends TestCase
         self::assertSame(
             $expectedText,
             $verse->getText()
+        );
+
+        self::assertSame(
+            $expectedLongReference,
+            $verse->getFullReference()
         );
     }
 
@@ -173,7 +193,5 @@ class ServiceIntegrationTest extends TestCase
             $expectedLanguageCode,
             $detailedVersion->getLanguageCode()
         );
-
-        print_r($detailedVersion);
     }
 }

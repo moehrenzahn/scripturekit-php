@@ -8,6 +8,7 @@ use Moehrenzahn\ScriptureKit\Data\Version;
 use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
 use Moehrenzahn\ScriptureKit\Util\QuranChapterNames;
 use Moehrenzahn\ScriptureKit\Util\TanakhBookNames;
+use RuntimeException;
 
 class VerseRenderer
 {
@@ -42,9 +43,11 @@ class VerseRenderer
         }
         $bookName = $this->getBookName($verseRequest, $version);
         $chapterName = $this->getChapterName($verseRequest, $version);
-        $text = $this->verseTextRenderer->render($verseRequest, $version);
-        if (!$text) {
-            $errors[] = 'Verse is not available';
+        try {
+            $text = $this->verseTextRenderer->render($verseRequest, $version);
+        } catch (RuntimeException $e) {
+            $text = '';
+            $errors[] = $e->getMessage();
         }
 
         return new RenderedVerse(

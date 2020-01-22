@@ -53,15 +53,8 @@ class ZefaniaParser implements ParserInterface
         $xmlElements = $xml->xpath(
             "BIBLEBOOK[@bnumber='$bookNumber']/CHAPTER[@cnumber='$chapter']/VERS[@vnumber='$verse']"
         );
-        if (!$xmlElements[0]) {
-            throw new RuntimeException(
-                sprintf(
-                    'Verse %s of %s %s is not included in this version.',
-                    $verse,
-                    BibleBookNames::getBookName($bookNumber),
-                    $chapter
-                )
-            );
+        if (!isset($xmlElements[0])) {
+            throw new RuntimeException('Verse is not included in this version.');
         }
 
         return $this->convertNodes($xmlElements)[0];
@@ -88,13 +81,7 @@ class ZefaniaParser implements ParserInterface
             "BIBLEBOOK[@bnumber='$bookNumber']/CHAPTER[@cnumber='$chapter']/VERS[$verseStatement]"
         );
         if (!$xmlElements) {
-            throw new RuntimeException(
-                sprintf(
-                    '%s chapter %s is not included in this bible version.',
-                    BibleBookNames::getBookName($bookNumber),
-                    $chapter
-                )
-            );
+            throw new RuntimeException('Verses are not included in this version.');
         }
 
         return $this->convertNodes($xmlElements);
@@ -117,13 +104,7 @@ class ZefaniaParser implements ParserInterface
             "BIBLEBOOK[@bnumber='$bookNumber']/CHAPTER[@cnumber='$chapter']/descendant::*"
         );
         if (!$xmlElements) {
-            throw new RuntimeException(
-                sprintf(
-                    '%s chapter %s is not included in this bible version.',
-                    BibleBookNames::getBookName($bookNumber),
-                    $chapter
-                )
-            );
+            throw new RuntimeException('Chapter is not included in this version.');
         }
 
         return $this->convertNodes($xmlElements);

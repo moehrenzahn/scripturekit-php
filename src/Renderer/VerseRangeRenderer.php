@@ -9,10 +9,10 @@ namespace Moehrenzahn\ScriptureKit\Renderer;
 class VerseRangeRenderer
 {
     /**
-     * @param array $verseNumbers
+     * @param int[] $verseNumbers
      * @return string
      */
-    public function render(array $verseNumbers)
+    public function render(array $verseNumbers): string
     {
         sort($verseNumbers);
         $last = -1;
@@ -38,7 +38,7 @@ class VerseRangeRenderer
      * @param int $b
      * @return bool
      */
-    private function isAdjacent($a, $b)
+    private function isAdjacent($a, $b): bool
     {
         return (($a + 1) === $b);
     }
@@ -47,7 +47,7 @@ class VerseRangeRenderer
      * @param array $ranges
      * @return string
      */
-    private function rangesToString(array $ranges)
+    private function rangesToString(array $ranges): string
     {
         $rangeStrings = [];
         foreach ($ranges as $range) {
@@ -61,7 +61,7 @@ class VerseRangeRenderer
      * @param int[] $range
      * @return string
      */
-    private function rangeToString(array $range)
+    private function rangeToString(array $range): string
     {
         $rangeString = array_shift($range);
         if (!empty($range)) {

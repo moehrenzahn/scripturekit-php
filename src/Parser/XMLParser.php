@@ -51,6 +51,8 @@ class XMLParser
     public function convertNodes(array $xmlElements, string $idAttributeKey, array $typeMap): array
     {
         $pieces = [];
+        $i = 1;
+        $numberOfElements = count($xmlElements);
         foreach ($xmlElements as $element) {
             $attributes = [];
             foreach ($element->attributes() as $key => $value) {
@@ -59,18 +61,22 @@ class XMLParser
 
             $content = StringHelper::removeWhitespace((string)$element);
 
-            // Prettify single verses
-            if (count($xmlElements) === 1) {
+            // Prettify verses
+            if ($i === 1) {
                 $content = StringHelper::uppercaseFirst($content);
-                $content = StringHelper::trailingCommaToString($content);
+            }
+            if ($i === $numberOfElements) {
+                $content = StringHelper::trailingCommaToPeriod($content);
             }
 
             $pieces[] = new ScripturePiece(
                 $typeMap[$element->getName()],
-                (string)$element->attributes()[$idAttributeKey],
+                (int)$element->attributes()[$idAttributeKey],
                 $content,
                 $attributes
             );
+
+            $i++;
         }
 
         return $pieces;
