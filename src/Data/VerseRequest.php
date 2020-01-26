@@ -33,27 +33,47 @@ class VerseRequest
     /**
      * @var int[]
      */
-    private $verses = [];
+    private $verses;
 
     /**
      * @var bool
      */
-    private $showAnnotations = true;
+    private $showAnnotations;
 
     /**
      * @var bool
      */
-    private $inferLinebreaks = true;
+    private $inferLinebreaks;
 
     /**
      * @var int[]
      */
-    private $highlightedVerses = [];
+    private $highlightedVerses;
 
     /**
      * @var bool
      */
-    private $returnHtml = false;
+    private $returnHtml;
+
+    /**
+     * @var string[]
+     */
+    private $tanachBookNames;
+
+    /**
+     * @var string[]
+     */
+    private $bibleBookNames;
+
+    /**
+     * @var string[]
+     */
+    private $quranChapterNames;
+
+    /**
+     * @var string
+     */
+    private $chapterVerseSeparator;
 
     /**
      * VerseRequest constructor.
@@ -66,6 +86,10 @@ class VerseRequest
      * @param bool     $inferLinebreaks
      * @param int[]    $highlightedVerses
      * @param bool     $returnHtml
+     * @param string[] $tanachBookNames
+     * @param string[] $bibleBookNames
+     * @param string[] $quranChapterNames
+     * @param string   $chapterVerseSeparator
      */
     public function __construct(
         ?int $bookNumber,
@@ -75,7 +99,11 @@ class VerseRequest
         bool $showAnnotations,
         bool $inferLinebreaks,
         array $highlightedVerses,
-        bool $returnHtml
+        bool $returnHtml,
+        array $tanachBookNames,
+        array $bibleBookNames,
+        array $quranChapterNames,
+        string $chapterVerseSeparator
     ) {
         $this->bookNumber = $bookNumber;
         $this->chapter = $chapter;
@@ -85,7 +113,12 @@ class VerseRequest
         $this->inferLinebreaks = $inferLinebreaks;
         $this->highlightedVerses = $highlightedVerses;
         $this->returnHtml = $returnHtml;
+        $this->tanachBookNames = $tanachBookNames;
+        $this->bibleBookNames = $bibleBookNames;
+        $this->quranChapterNames = $quranChapterNames;
+        $this->chapterVerseSeparator = $chapterVerseSeparator;
     }
+
 
     /**
      * Book number is not applicable for quran verses
@@ -151,5 +184,37 @@ class VerseRequest
     public function isReturnHtml(): bool
     {
         return $this->returnHtml;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTanachBookNames(): array
+    {
+        return $this->tanachBookNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getBibleBookNames(): array
+    {
+        return $this->bibleBookNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getQuranChapterNames(): array
+    {
+        return $this->quranChapterNames;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChapterVerseSeparator(): string
+    {
+        return $this->chapterVerseSeparator;
     }
 }

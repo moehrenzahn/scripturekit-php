@@ -3,11 +3,9 @@
 namespace Moehrenzahn\ScriptureKit\Renderer\Html;
 
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
+use Moehrenzahn\ScriptureKit\Renderer\Names;
 use Moehrenzahn\ScriptureKit\Renderer\ReferenceRendererInterface;
 use Moehrenzahn\ScriptureKit\Renderer\VerseRangeRenderer;
-use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
-use Moehrenzahn\ScriptureKit\Util\QuranChapterNames;
-use Moehrenzahn\ScriptureKit\Util\TanakhBookNames;
 use RuntimeException;
 
 class ReferenceRenderer implements ReferenceRendererInterface
@@ -17,9 +15,15 @@ class ReferenceRenderer implements ReferenceRendererInterface
      */
     private $verseRangeRenderer;
 
-    public function __construct(VerseRangeRenderer $verseRangeRenderer)
+    /**
+     * @var Names
+     */
+    private $names;
+
+    public function __construct(VerseRangeRenderer $verseRangeRenderer, Names $names)
     {
         $this->verseRangeRenderer = $verseRangeRenderer;
+        $this->names = $names;
     }
 
     public function getLongReference(VerseRequest $verseRequest): string
@@ -51,11 +55,11 @@ class ReferenceRenderer implements ReferenceRendererInterface
         if ($book = $verseRequest->getBookNumber()) {
             switch ($verseRequest->getCollection()) {
                 case VerseRequest::COLLECTION_TANAKH:
-                    $bookName = TanakhBookNames::getBookName($book);
+                    $bookName = $this->names->getTanakhBookName($book);
                     break;
                 case VerseRequest::COLLECTION_NT:
                 case VerseRequest::COLLECTION_OT:
-                    $bookName = BibleBookNames::getBookName($book);
+                    $bookName = $this->names->getBibleBookName($book);
                     break;
             }
             if (!isset($bookName)) {
@@ -66,7 +70,7 @@ class ReferenceRenderer implements ReferenceRendererInterface
 
             if ($withAltName) {
                 if ($verseRequest->getCollection() === VerseRequest::COLLECTION_TANAKH) {
-                    $altName = BibleBookNames::getBookName($verseRequest->getBookNumber());
+                    $altName = $this->names->getBibleBookName($verseRequest->getBookNumber());
                 }
                 if (isset($altName)) {
                     $result .= " <span class='name-alt'>($altName)</span>";
@@ -77,7 +81,7 @@ class ReferenceRenderer implements ReferenceRendererInterface
         }
 
         if ($verseRequest->getCollection() === VerseRequest::COLLECTION_QURAN) {
-            $chapterName = QuranChapterNames::getChapterName($verseRequest->getChapter());
+            $chapterName = $this->names->getQuranChapterName($verseRequest->getChapter());
             $result .= $chapterName . ' ';
             if ($withAltName) {
                 $altName = 'Surah ' . $verseRequest->getChapter();
@@ -89,7 +93,7 @@ class ReferenceRenderer implements ReferenceRendererInterface
 
         if (!empty($verseRequest->getVerses())) {
             if (!isset($chapterName)) {
-                $result .= ':';
+                $result .= $verseRequest->getChapterVerseSeparator();
             }
             $result .= $this->verseRangeRenderer->render($verseRequest->getVerses());
         }

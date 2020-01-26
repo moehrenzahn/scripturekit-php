@@ -2,9 +2,6 @@
 
 namespace Moehrenzahn\ScriptureKit\Util;
 
-
-use RuntimeException;
-
 class TanakhBookNames
 {
     const BOOK_NAMES = [
@@ -48,16 +45,4 @@ class TanakhBookNames
         38 => "Zkharyāh",
         39 => "Mal’ākhî",
     ];
-
-    /**
-     * @param int $number
-     * @return string
-     */
-    public static function getBookName(int $number): string
-    {
-        if (isset(self::BOOK_NAMES[$number])) {
-            return self::BOOK_NAMES[$number];
-        }
-        throw new RuntimeException(sprintf('Book name for number %s could not be resolved.', $number));
-    }
 }

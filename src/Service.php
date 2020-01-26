@@ -9,6 +9,7 @@ use Moehrenzahn\ScriptureKit\Data\Version;
 use Moehrenzahn\ScriptureKit\Parser\QuranParser;
 use Moehrenzahn\ScriptureKit\Parser\XMLParser;
 use Moehrenzahn\ScriptureKit\Parser\ZefaniaParser;
+use Moehrenzahn\ScriptureKit\Renderer\Names;
 use Moehrenzahn\ScriptureKit\Renderer\ReferenceRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\ScripturePieceRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\VerseRangeRenderer;
@@ -46,6 +47,11 @@ class Service
     private $verseHtmlRenderer;
 
     /**
+     * @var Names
+     */
+    private $names;
+
+    /**
      * Service constructor.
      *
      * @param Version $version Create this object via `new Version(...)`
@@ -54,6 +60,8 @@ class Service
     public function __construct(Version $version)
     {
         $this->version = $version;
+
+        $this->names = new Names();
 
         $verseRangeRenderer = new VerseRangeRenderer();
 
@@ -67,21 +75,25 @@ class Service
 
         $this->verseRenderer = new VerseRenderer(
             new ReferenceRenderer(
-                $verseRangeRenderer
+                $verseRangeRenderer,
+                $this->names
             ),
             new VerseTextRenderer(
                 $parser,
                 new ScripturePieceRenderer()
-            )
+            ),
+            $this->names
         );
         $this->verseHtmlRenderer = new VerseRenderer(
             new Renderer\Html\ReferenceRenderer(
-                $verseRangeRenderer
+                $verseRangeRenderer,
+                $this->names
             ),
             new VerseTextRenderer(
                 $parser,
                 new Renderer\Html\ScripturePieceRenderer()
-            )
+            ),
+            $this->names
         );
     }
 
@@ -92,6 +104,10 @@ class Service
      */
     public function createVerse(VerseRequest $verseRequest): RenderedVerse
     {
+        $this->names->setBibleBookNames($verseRequest->getBibleBookNames());
+        $this->names->setTanakhBookNames($verseRequest->getTanachBookNames());
+        $this->names->setQuranChapterNames($verseRequest->getQuranChapterNames());
+
         if ($verseRequest->isReturnHtml()) {
             return $this->verseHtmlRenderer->render(
                 $verseRequest,

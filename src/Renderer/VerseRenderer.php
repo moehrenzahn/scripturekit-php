@@ -5,9 +5,6 @@ namespace Moehrenzahn\ScriptureKit\Renderer;
 use Moehrenzahn\ScriptureKit\Data\RenderedVerse;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Data\Version;
-use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
-use Moehrenzahn\ScriptureKit\Util\QuranChapterNames;
-use Moehrenzahn\ScriptureKit\Util\TanakhBookNames;
 use RuntimeException;
 
 class VerseRenderer
@@ -22,12 +19,19 @@ class VerseRenderer
      */
     private $verseTextRenderer;
 
+    /**
+     * @var Names
+     */
+    private $names;
+
     public function __construct(
         ReferenceRendererInterface $referenceRenderer,
-        VerseTextRendererInterface $verseTextRenderer
+        VerseTextRendererInterface $verseTextRenderer,
+        Names $names
     ) {
         $this->referenceRenderer = $referenceRenderer;
         $this->verseTextRenderer = $verseTextRenderer;
+        $this->names = $names;
     }
 
     public function render(VerseRequest $verseRequest, Version $version): RenderedVerse
@@ -67,9 +71,9 @@ class VerseRenderer
     {
         $bookName = '';
         if ($version->getType() === Version::TYPE_TANAKH) {
-            $bookName = TanakhBookNames::getBookName($verseRequest->getBookNumber());
-        } else if ($version->getType() === Version::TYPE_BIBLE) {
-            $bookName = BibleBookNames::getBookName($verseRequest->getBookNumber());
+            $bookName = $this->names->getTanakhBookName($verseRequest->getBookNumber());
+        } elseif ($version->getType() === Version::TYPE_BIBLE) {
+            $bookName = $this->names->getBibleBookName($verseRequest->getBookNumber());
         }
 
         return $bookName;
@@ -79,7 +83,7 @@ class VerseRenderer
     {
         $chapterName = '';
         if ($version->getType() === Version::TYPE_QURAN) {
-            $chapterName = QuranChapterNames::getChapterName($verseRequest->getChapter());
+            $chapterName = $this->names->getQuranChapterName($verseRequest->getChapter());
         }
 
         return $chapterName;

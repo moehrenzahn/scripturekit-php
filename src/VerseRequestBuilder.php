@@ -3,6 +3,9 @@
 namespace Moehrenzahn\ScriptureKit;
 
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
+use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
+use Moehrenzahn\ScriptureKit\Util\QuranChapterNames;
+use Moehrenzahn\ScriptureKit\Util\TanakhBookNames;
 use RuntimeException;
 
 /**
@@ -53,6 +56,26 @@ class VerseRequestBuilder
     private $returnHtml = false;
 
     /**
+     * @var string
+     */
+    private $chapterVerseSeparator = ':';
+
+    /**
+     * @var string[]
+     */
+    private $tanachBookNames = TanakhBookNames::BOOK_NAMES;
+
+    /**
+     * @var string[]
+     */
+    private $bibleBookNames = BibleBookNames::BOOK_NAMES;
+
+    /**
+     * @var string[]
+     */
+    private $quranChapterNames = QuranChapterNames::CHAPTER_NAMES;
+
+    /**
      * VerseRequestBuilder constructor.
      *
      * @param int   $chapter
@@ -64,7 +87,15 @@ class VerseRequestBuilder
         array $verses,
         int $collection
     ) {
-        if (!in_array($collection, [VerseRequest::COLLECTION_QURAN, VerseRequest::COLLECTION_TANAKH, VerseRequest::COLLECTION_OT, VerseRequest::COLLECTION_NT])) {
+        if (!in_array(
+            $collection,
+            [
+                VerseRequest::COLLECTION_QURAN,
+                VerseRequest::COLLECTION_TANAKH,
+                VerseRequest::COLLECTION_OT,
+                VerseRequest::COLLECTION_NT,
+            ]
+        )) {
             throw new RuntimeException('Invalid collection specified.');
         }
 
@@ -117,6 +148,38 @@ class VerseRequestBuilder
     }
 
     /**
+     * @param string[] $tanachBookNames
+     */
+    public function setTanakhBookNames(array $tanachBookNames): void
+    {
+        $this->tanachBookNames = $tanachBookNames;
+    }
+
+    /**
+     * @param string[] $bibleBookNames
+     */
+    public function setBibleBookNames(array $bibleBookNames): void
+    {
+        $this->bibleBookNames = $bibleBookNames;
+    }
+
+    /**
+     * @param string[] $quranChapterNames
+     */
+    public function setQuranChapterNames(array $quranChapterNames): void
+    {
+        $this->quranChapterNames = $quranChapterNames;
+    }
+
+    /**
+     * @param string $chapterVerseSeparator
+     */
+    public function setChapterVerseSeparator(string $chapterVerseSeparator): void
+    {
+        $this->chapterVerseSeparator = $chapterVerseSeparator;
+    }
+
+    /**
      * Use this method to create the request after setting
      * all desired optional parameters via the setter methods.
      *
@@ -135,7 +198,11 @@ class VerseRequestBuilder
             $this->showAnnotations,
             $this->inferLinebreaks,
             $this->highlightedVerses,
-            $this->returnHtml
+            $this->returnHtml,
+            $this->tanachBookNames,
+            $this->bibleBookNames,
+            $this->quranChapterNames,
+            $this->chapterVerseSeparator
         );
     }
 }

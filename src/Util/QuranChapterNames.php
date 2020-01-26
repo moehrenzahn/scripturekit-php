@@ -120,9 +120,4 @@ class QuranChapterNames
         113 => "Al-Falaq",
         114 => "An-Nas",
     ];
-
-    public static function getChapterName(int $number): string
-    {
-        return self::CHAPTER_NAMES[$number] ?? '';
-    }
 }
