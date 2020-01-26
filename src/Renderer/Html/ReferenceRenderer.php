@@ -72,7 +72,7 @@ class ReferenceRenderer implements ReferenceRendererInterface
                 if ($verseRequest->getCollection() === VerseRequest::COLLECTION_TANAKH) {
                     $altName = $this->names->getBibleBookName($verseRequest->getBookNumber());
                 }
-                if (isset($altName)) {
+                if (isset($altName) && $altName) {
                     $result .= " <span class='name-alt'>($altName)</span>";
                 }
             }
@@ -84,7 +84,7 @@ class ReferenceRenderer implements ReferenceRendererInterface
             $chapterName = $this->names->getQuranChapterName($verseRequest->getChapter());
             $result .= $chapterName . ' ';
             if ($withAltName) {
-                $altName = 'Surah ' . $verseRequest->getChapter();
+                $altName = $this->names->getQuranChapterName(0) . ' ' . $verseRequest->getChapter();
                 $result .= "<span class='name-alt'>($altName)</span> ";
             }
         } else {

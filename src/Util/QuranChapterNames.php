@@ -5,6 +5,7 @@ namespace Moehrenzahn\ScriptureKit\Util;
 class QuranChapterNames
 {
     const CHAPTER_NAMES = [
+        0 => "Surah",
         1 => "Al-Fatihah",
         2 => "Al-Baqarah",
         3 => "Al-Imran",
