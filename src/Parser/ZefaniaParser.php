@@ -2,7 +2,6 @@
 
 namespace Moehrenzahn\ScriptureKit\Parser;
 
-use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
 use RuntimeException;
 use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
 use SimpleXMLElement;
@@ -20,6 +19,7 @@ class ZefaniaParser implements ParserInterface
         'STYLE' => ScripturePiece::TYPE_STYLED,
         'GRAM' => ScripturePiece::TYPE_GRAMMAR_NOTE,
         'NOTE' => ScripturePiece::TYPE_NOTE,
+        'DIV' => ScripturePiece::TYPE_NOTE,
         'SUP' => ScripturePiece::TYPE_SUPERSCRIPT,
         'XREF' => ScripturePiece::TYPE_REF,
         'CAPTION' => ScripturePiece::TYPE_CAPTION,
@@ -136,7 +136,6 @@ class ZefaniaParser implements ParserInterface
     public function loadTitle(string $filePath): string
     {
         $xml = $this->xmlParser->getXMLObject($filePath);
-
 
         return trim((string) ($xml->INFORMATION->title[0] ?? ''));
     }
