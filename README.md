@@ -38,6 +38,7 @@ ScriptureKit is compatible with the following scripture files:
 
 - [ZefaniaXML](https://zefania-sharp.sourceforge.io/) files (.xml) 
 - `XML Format (One File-Whole Quran)` exported from [qurandatabase.org](http://qurandatabase.org). (.xml)
+- [Sefaria](https://www.sefaria.org) JSON format concatenated via [Sefaria Merger](https://github.com/moehrenzahn/sefaria-merger) 
 
 ## Usage
 

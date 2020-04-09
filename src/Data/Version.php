@@ -11,6 +11,7 @@ namespace Moehrenzahn\ScriptureKit\Data;
 class Version
 {
     public const TYPE_TANAKH = 0;
+    public const TYPE_TANAKH_SEFARIA = 3;
     public const TYPE_BIBLE = 1;
     public const TYPE_QURAN = 2;
 
@@ -22,7 +23,7 @@ class Version
     private $name;
 
     /**
-     * The path to the xml file with the version source
+     * The path to the xml or json file with the version source
      *
      * @var string
      */

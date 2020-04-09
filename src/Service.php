@@ -7,6 +7,7 @@ use Moehrenzahn\ScriptureKit\Data\DetailedVersion;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Data\Version;
 use Moehrenzahn\ScriptureKit\Parser\QuranParser;
+use Moehrenzahn\ScriptureKit\Parser\SefariaParser;
 use Moehrenzahn\ScriptureKit\Parser\XMLParser;
 use Moehrenzahn\ScriptureKit\Parser\ZefaniaParser;
 use Moehrenzahn\ScriptureKit\Renderer\Names;
@@ -65,10 +66,15 @@ class Service
 
         $verseRangeRenderer = new VerseRangeRenderer();
 
-        if ($version->getType() === Version::TYPE_QURAN) {
-            $parser = new QuranParser(new XMLParser());
-        } else {
-            $parser = new ZefaniaParser(new XMLParser());
+        switch ($version->getType()) {
+            case Version::TYPE_QURAN:
+                $parser = new QuranParser(new XMLParser());
+                break;
+            case Version::TYPE_TANAKH_SEFARIA:
+                $parser = new SefariaParser();
+                break;
+            default:
+                $parser = new ZefaniaParser(new XMLParser());
         }
 
         $this->versionRenderer = new VersionRenderer($parser);
