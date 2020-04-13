@@ -4,15 +4,19 @@ namespace Moehrenzahn\ScriptureKit;
 
 use Moehrenzahn\ScriptureKit\Data\RenderedVerse;
 use Moehrenzahn\ScriptureKit\Data\DetailedVersion;
+use Moehrenzahn\ScriptureKit\Data\VerseData;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Data\Version;
+use Moehrenzahn\ScriptureKit\Parser\ParserInterface;
 use Moehrenzahn\ScriptureKit\Parser\QuranParser;
 use Moehrenzahn\ScriptureKit\Parser\SefariaParser;
 use Moehrenzahn\ScriptureKit\Parser\XMLParser;
 use Moehrenzahn\ScriptureKit\Parser\ZefaniaParser;
+use Moehrenzahn\ScriptureKit\Renderer\Html\ReferenceRenderer as HtmlReferenceRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\Names;
 use Moehrenzahn\ScriptureKit\Renderer\ReferenceRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\ScripturePieceRenderer;
+use Moehrenzahn\ScriptureKit\Renderer\VerseDataRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\VerseRangeRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\VerseRenderer;
 use Moehrenzahn\ScriptureKit\Renderer\VerseTextRenderer;
@@ -53,6 +57,11 @@ class Service
     private $names;
 
     /**
+     * @var ParserInterface
+     */
+    private $parser;
+
+    /**
      * Service constructor.
      *
      * @param Version $version Create this object via `new Version(...)`
@@ -64,42 +73,33 @@ class Service
 
         $this->names = new Names();
 
-        $verseRangeRenderer = new VerseRangeRenderer();
-
         switch ($version->getType()) {
             case Version::TYPE_QURAN:
-                $parser = new QuranParser(new XMLParser());
+                $this->parser = new QuranParser(new XMLParser(), new ReferenceRenderer(
+                    new VerseRangeRenderer(),
+                    $this->names
+                ));
                 break;
             case Version::TYPE_TANAKH_SEFARIA:
-                $parser = new SefariaParser();
+                $this->parser = new SefariaParser();
                 break;
             default:
-                $parser = new ZefaniaParser(new XMLParser());
+                $this->parser = new ZefaniaParser(new XMLParser());
         }
 
-        $this->versionRenderer = new VersionRenderer($parser);
+        $this->versionRenderer = new VersionRenderer($this->parser);
 
         $this->verseRenderer = new VerseRenderer(
-            new ReferenceRenderer(
-                $verseRangeRenderer,
-                $this->names
-            ),
             new VerseTextRenderer(
-                $parser,
+                $this->parser,
                 new ScripturePieceRenderer()
-            ),
-            $this->names
+            )
         );
         $this->verseHtmlRenderer = new VerseRenderer(
-            new Renderer\Html\ReferenceRenderer(
-                $verseRangeRenderer,
-                $this->names
-            ),
             new VerseTextRenderer(
-                $parser,
+                $this->parser,
                 new Renderer\Html\ScripturePieceRenderer()
-            ),
-            $this->names
+            )
         );
     }
 
@@ -110,21 +110,45 @@ class Service
      */
     public function createVerse(VerseRequest $verseRequest): RenderedVerse
     {
+        $verseData = $this->createVerseData($verseRequest);
+
+        if ($verseRequest->isReturnHtml()) {
+            return $this->verseHtmlRenderer->render($verseData);
+        } else {
+            return $this->verseRenderer->render($verseData);
+        }
+    }
+
+    public function createVerseData(VerseRequest $verseRequest): VerseData
+    {
         $this->names->setBibleBookNames($verseRequest->getBibleBookNames());
         $this->names->setTanakhBookNames($verseRequest->getTanachBookNames());
         $this->names->setQuranChapterNames($verseRequest->getQuranChapterNames());
 
         if ($verseRequest->isReturnHtml()) {
-            return $this->verseHtmlRenderer->render(
-                $verseRequest,
-                $this->version
+            $referenceRenderer = new HtmlReferenceRenderer(
+                new VerseRangeRenderer(),
+                $this->names
             );
         } else {
-            return $this->verseRenderer->render(
-                $verseRequest,
-                $this->version
+            $referenceRenderer = new ReferenceRenderer(
+                new VerseRangeRenderer(),
+                $this->names
             );
         }
+
+        $renderer = new VerseDataRenderer(
+            $referenceRenderer,
+            new VerseTextRenderer(
+                $this->parser,
+                new ScripturePieceRenderer()
+            ),
+            $this->names
+        );
+        return $renderer->render(
+            $verseRequest,
+            $this->version
+        );
     }
 
     /**

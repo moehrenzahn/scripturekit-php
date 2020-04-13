@@ -5,7 +5,6 @@ namespace Moehrenzahn\ScriptureKit\Renderer\Html;
 use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Renderer\ScripturePieceRendererInterface;
-use Moehrenzahn\ScriptureKit\Util\StringHelper;
 
 class ScripturePieceRenderer implements ScripturePieceRendererInterface
 {
@@ -20,24 +19,39 @@ class ScripturePieceRenderer implements ScripturePieceRendererInterface
         $result = '';
 
         foreach ($pieces as $piece) {
-            $template = '';
-            if ($piece->getType() === ScripturePiece::TYPE_LINEBREAK) {
-                $template = __DIR__ . '/../../Template/ScripturePiece/Linebreak.phtml';
-            } else if ($piece->getType() === ScripturePiece::TYPE_CAPTION) {
-                $template = __DIR__ . '/../../Template/ScripturePiece/Caption.phtml';
-            } else if ($piece->getType() === ScripturePiece::TYPE_STYLED) {
-                $template = __DIR__ . '/../../Template/ScripturePiece/Styled.phtml';
-            } else if (in_array($piece->getType(), [ScripturePiece::TYPE_REF, ScripturePiece::TYPE_SUPERSCRIPT, ScripturePiece::TYPE_NOTE])) {
-                if ($verseRequest->isShowAnnotations()) {
-                    $template = __DIR__ . '/../../Template/ScripturePiece/Annotation.phtml';
-                }
-            } else if ($piece->getType() === ScripturePiece::TYPE_CONTENT) {
-                if (in_array($piece->getPieceId(), $verseRequest->getHighlightedVerses())) {
-                    $template = __DIR__ . '/../../Template/ScripturePiece/Highlight.phtml';
-                } else {
-                    $template = __DIR__ . '/../../Template/ScripturePiece/Default.phtml';
-                }
+            switch ($piece->getType()) {
+                case ScripturePiece::TYPE_LINEBREAK:
+                    $template = __DIR__ . '/../../Template/ScripturePiece/Linebreak.phtml';
+                    break;
+                case ScripturePiece::TYPE_CAPTION:
+                    $template = __DIR__ . '/../../Template/ScripturePiece/Caption.phtml';
+                    break;
+                case ScripturePiece::TYPE_STYLED:
+                    $template = __DIR__ . '/../../Template/ScripturePiece/Styled.phtml';
+                    break;
+                case ScripturePiece::TYPE_REF:
+                case ScripturePiece::TYPE_SUPERSCRIPT:
+                case ScripturePiece::TYPE_NOTE:
+                    $template = $verseRequest->isShowAnnotations() ?
+                        __DIR__ . '/../../Template/ScripturePiece/Annotation.phtml' : '';
+                    break;
+                case ScripturePiece::TYPE_CONTENT:
+                    if (in_array($piece->getPieceId(), $verseRequest->getHighlightedVerses())) {
+                        $template = __DIR__ . '/../../Template/ScripturePiece/Highlight.phtml';
+                    } else {
+                        $template = __DIR__ . '/../../Template/ScripturePiece/Default.phtml';
+                    }
+                    break;
+                case ScripturePiece::TYPE_CHAPTER_TITLE:
+                    $template = $verseRequest->isShowAnnotations() ? __DIR__ . '/../../Template/ScripturePiece/ChapterTitle.phtml' : '';
+                    break;
+                case ScripturePiece::TYPE_BOOK_TITLE:
+                    $template = $verseRequest->isShowAnnotations() ? __DIR__ . '/../../Template/ScripturePiece/BookTitle.phtml' : '';
+                    break;
+                default:
+                    $template = '';
             }
+
             if ($template) {
                 $result .= $this->renderTemplate($template, $piece);
             }

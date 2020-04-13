@@ -23,12 +23,22 @@ class VerseRequestBuilder
     /**
      * @var int
      */
-    private $chapter;
+    private $startChapter;
 
     /**
-     * @var int[]
+     * @var int|null
      */
-    private $verses = [];
+    private $endChapter;
+
+    /**
+     * @var ?int
+     */
+    private $startVerse;
+
+    /**
+     * @var ?int
+     */
+    private $endVerse;
 
     /**
      * @var int
@@ -78,14 +88,18 @@ class VerseRequestBuilder
     /**
      * VerseRequestBuilder constructor.
      *
-     * @param int   $chapter
-     * @param int[] $verses
-     * @param int   $collection
+     * @param int      $startChapter
+     * @param int      $startVerse
+     * @param int      $collection
+     * @param int|null $endVerse
+     * @param int|null $endChapter
      */
     public function __construct(
-        int $chapter,
-        array $verses,
-        int $collection
+        int $startChapter,
+        int $collection,
+        ?int $startVerse = null,
+        ?int $endVerse = null,
+        ?int $endChapter = null
     ) {
         if (!in_array(
             $collection,
@@ -99,8 +113,10 @@ class VerseRequestBuilder
             throw new RuntimeException('Invalid collection specified.');
         }
 
-        $this->chapter = $chapter;
-        $this->verses = $verses;
+        $this->startChapter = $startChapter;
+        $this->endChapter = $endChapter ?? $startChapter;
+        $this->startVerse = $startVerse;
+        $this->endVerse = $endVerse ?? $startVerse;
         $this->collection = $collection;
     }
 
@@ -192,9 +208,11 @@ class VerseRequestBuilder
         }
         return new VerseRequest(
             $this->bookNumber,
-            $this->chapter,
+            $this->startChapter,
+            $this->endChapter,
             $this->collection,
-            $this->verses,
+            $this->startVerse,
+            $this->endVerse,
             $this->showAnnotations,
             $this->inferLinebreaks,
             $this->highlightedVerses,

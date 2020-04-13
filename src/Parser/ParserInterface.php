@@ -41,6 +41,27 @@ interface ParserInterface
         int $chapter
     ): array;
 
+    /**
+     * @param string $filePath
+     * @param int|null $startBookNumber
+     * @param int    $startChapter
+     * @param int    $startVerse
+     * @param int|null $endBookNumber
+     * @param int    $endChapter
+     * @param int    $endVerse
+     *
+     * @return ScripturePiece[]
+     */
+    public function loadVerseRange(
+        string $filePath,
+        ?int $startBookNumber,
+        int $startChapter,
+        int $startVerse,
+        ?int $endBookNumber,
+        int $endChapter,
+        int $endVerse
+    ): array;
+
     public function loadTitle(string $filePath): string;
 
     public function loadLanguageCode(string $filePath): string;

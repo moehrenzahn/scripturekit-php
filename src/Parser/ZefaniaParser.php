@@ -112,6 +112,30 @@ class ZefaniaParser implements ParserInterface
 
     /**
      * @param string $filePath
+     * @param int|null $startBookNumber
+     * @param int    $startChapter
+     * @param int    $startVerse
+     * @param int|null $endBookNumber
+     * @param int    $endChapter
+     * @param int    $endVerse
+     * @throws RuntimeException
+     * @return ScripturePiece[]
+     */
+    public function loadVerseRange(
+        string $filePath,
+        ?int $startBookNumber,
+        int $startChapter,
+        int $startVerse,
+        ?int $endBookNumber,
+        int $endChapter,
+        int $endVerse
+    ): array {
+        /** @TODO Needs to be implemented  */
+        throw new RuntimeException('Not implemented yet.');
+    }
+
+    /**
+     * @param string $filePath
      *
      * @return string[]
      */

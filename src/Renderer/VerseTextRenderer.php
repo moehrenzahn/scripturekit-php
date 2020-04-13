@@ -37,24 +37,77 @@ class VerseTextRenderer implements VerseTextRendererInterface
         $this->scripturePieceRenderer = $scripturePieceRenderer;
     }
 
-    public function render(VerseRequest $verseRequest, Version $version): string
+    /**
+     * Chooses the most performant way to get the requested text from the parser
+     *
+     * @param VerseRequest $verseRequest
+     * @param Version      $version
+     *
+     * @return ScripturePiece[]
+     */
+    public function getPieces(VerseRequest $verseRequest, Version $version): array
     {
-        $verses = $verseRequest->getVerses();
+        $bookNumber = $verseRequest->getBookNumber();
+        $startVerse = $verseRequest->getStartVerse();
+        $endVerse = $verseRequest->getEndVerse();
+        $startChapter = $verseRequest->getStartChapter();
+        $endChapter = $verseRequest->getEndChapter();
 
-        if (empty($verses)) {
-            $pieces = $this->parser->loadChapterText($version->getFilePath(), $verseRequest->getBookNumber(), $verseRequest->getChapter());
-        } elseif (count($verses) === 1) {
-            $pieces = [
-                $this->parser->loadVerseText($version->getFilePath(), $verseRequest->getBookNumber(), $verseRequest->getChapter(), $verses[0])
-            ];
+        if ($startChapter === $endChapter) {
+            $chapter = $startChapter;
+            if ($startVerse) {
+                $pieces = $this->parser->loadVersesText(
+                    $version->getFilePath(),
+                    $bookNumber,
+                    $chapter,
+                    range($startVerse, $endVerse ?? $startVerse)
+                );
+            } else {
+                $pieces = $this->parser->loadChapterText(
+                    $version->getFilePath(),
+                    $bookNumber,
+                    $chapter
+                );
+            }
         } else {
-            $pieces = $this->parser->loadVersesText($version->getFilePath(), $verseRequest->getBookNumber(), $verseRequest->getChapter(), $verses);
+            if ($startVerse) {
+                $pieces = $this->parser->loadVerseRange(
+                    $version->getFilePath(),
+                    $bookNumber,
+                    $startChapter,
+                    $startVerse ?? 1,
+                    $bookNumber,
+                    $endChapter,
+                    $endVerse ? $endVerse : ($startVerse ? $startVerse : 200)
+                );
+            } else {
+                $pieces = $this->parser->loadVerseRange(
+                    $version->getFilePath(),
+                    $bookNumber,
+                    $startChapter,
+                    1,
+                    $bookNumber,
+                    $endChapter,
+                    200
+                );
+            }
         }
 
         if ($verseRequest->isInferLinebreaks()) {
             $pieces = $this->addLineBreaks($pieces);
         }
 
+        return $pieces;
+    }
+
+    /**
+     * @param ScripturePiece[] $pieces
+     * @param VerseRequest $verseRequest
+     *
+     * @return string
+     */
+    public function render(array $pieces, VerseRequest $verseRequest): string
+    {
         return $this->scripturePieceRenderer->render($pieces, $verseRequest);
     }
 
@@ -62,7 +115,7 @@ class VerseTextRenderer implements VerseTextRendererInterface
      * @param ScripturePiece[] $pieces
      * @return ScripturePiece[]
      */
-    public function addLineBreaks(array $pieces): array
+    private function addLineBreaks(array $pieces): array
     {
         $result = [];
 

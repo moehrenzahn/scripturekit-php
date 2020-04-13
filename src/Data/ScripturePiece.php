@@ -19,6 +19,8 @@ class ScripturePiece
     public const TYPE_SUPERSCRIPT = 'sup';
     public const TYPE_GRAMMAR_NOTE = 'gram';
     public const TYPE_CAPTION = 'caption';
+    public const TYPE_BOOK_TITLE = 'bookTitle';
+    public const TYPE_CHAPTER_TITLE = 'chapterTitle';
     public const TYPE_CONTENT = 'content';
     private const TYPES = [
         self::TYPE_LINEBREAK,
@@ -29,6 +31,8 @@ class ScripturePiece
         self::TYPE_GRAMMAR_NOTE,
         self::TYPE_CAPTION,
         self::TYPE_CONTENT,
+        self::TYPE_BOOK_TITLE,
+        self::TYPE_CHAPTER_TITLE,
     ];
 
     /**

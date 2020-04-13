@@ -1,0 +1,242 @@
+{
+    "1:1": {
+        "title": "Hizb 1: Alīf-Lām-Mīm",
+        "id": 1
+   },
+    "2:75": {
+        "title": "Hizb 2",
+        "id": 2
+   },
+    "2:142": {
+        "title": "Hizb 3: Sayaqūlu",
+        "id": 3
+   },
+    "2:203": {
+        "title": "Hizb 4",
+        "id": 4
+   },
+    "2:253": {
+        "title": "Hizb 5: Tilka ’r-Rusulu",
+        "id": 5
+   },
+    "3:15": {
+        "title": "Hizb 6",
+        "id": 6
+   },
+    "3:93": {
+        "title": "Hizb 7: Lan Tanālū",
+        "id": 7
+   },
+    "3:171": {
+        "title": "Hizb 8",
+        "id": 8
+   },
+    "4:24": {
+        "title": "Hizb 9: Wa’l-muḥṣanātu",
+        "id": 9
+    },
+    "4:88": {
+        "title": "Hizb 10",
+        "id": 10
+    },
+    "4:148": {
+        "title": "Hizb 11: Lā yuḥibbu-’llāhu",
+        "id": 11
+    },
+    "5:27": {
+        "title": "Hizb 12",
+        "id": 12
+    },
+    "5:82": {
+        "title": "Hizb 13: Wa ’Idha Samiʿū",
+        "id": 13
+    },
+    "6:36": {
+        "title": "Hizb 14",
+        "id": 14
+    },
+    "6:111": {
+        "title": "Hizb 15: Wa-law annanā",
+        "id": 15
+    },
+    "7:1": {
+        "title": "Hizb 16",
+        "id": 16
+    },
+    "7:88": {
+        "title": "Hizb 17: Qāla ’l-mala’u",
+        "id": 17
+    },
+    "7:171": {
+        "title": "Hizb 18",
+        "id": 18
+    },
+    "8:41": {
+        "title": "Hizb 19: Wa-’aʿlamū",
+        "id": 19
+    },
+    "9:34": {
+        "title": "Hizb 20",
+        "id": 20
+    },
+    "9:93": {
+        "title": "Hizb 21: Yaʿtazerūn",
+        "id": 21
+    },
+    "10:26": {
+        "title": "Hizb 22",
+        "id": 22
+    },
+    "11:6": {
+        "title": "Hizb 23: Wa mā min dābbatin",
+        "id": 23
+    },
+    "11:84": {
+        "title": "Hizb 24",
+        "id": 24
+    },
+    "12:53": {
+        "title": "Hizb 25: Wa mā ubarri’u",
+        "id": 25
+    },
+    "13:19": {
+        "title": "Hizb 26",
+        "id": 26
+    },
+    "15:1": {
+        "title": "Hizb 27: Alīf-Lām-Rā’/Rubamā",
+        "id": 27
+    },
+    "16:51": {
+        "title": "Hizb 28",
+        "id": 28
+    },
+    "17:1": {
+        "title": "Hizb 29: Subḥāna ’lladhī",
+        "id": 29
+    },
+    "17:99": {
+        "title": "Hizb 30",
+        "id": 30
+    },
+    "18:75": {
+        "title": "Hizb 31: Qāla ’alam",
+        "id": 31
+    },
+    "20:1": {
+        "title": "Hizb 32",
+        "id": 32
+    },
+    "21:1": {
+        "title": "Hizb 33: Iqtaraba li’n-nāsi",
+        "id": 33
+    },
+    "22:1": {
+        "title": "Hizb 34",
+        "id": 34
+    },
+    "23:1": {
+        "title": "Hizb 35: Qad ’aflaḥa",
+        "id": 35
+    },
+    "24:21": {
+        "title": "Hizb 36",
+        "id": 36
+    },
+    "25:21": {
+        "title": "Hizb 37: Wa-qāla ’lladhīna",
+        "id": 37
+    },
+    "26:111": {
+        "title": "Hizb 38",
+        "id": 38
+    },
+    "27:56": {
+        "title": "Hizb 39: ’A’man Khalaqa",
+        "id": 39
+    },
+    "28:51": {
+        "title": "Hizb 40",
+        "id": 40
+    },
+    "29:46": {
+        "title": "Hizb 41: ’Utlu Mā ’ūḥiya",
+        "id": 41
+    },
+    "31:22": {
+        "title": "Hizb 42",
+        "id": 42
+    },
+    "33:31": {
+        "title": "Hizb 43: Wa-man yaqnut",
+        "id": 43
+    },
+    "34:24": {
+        "title": "Hizb 44",
+        "id": 44
+    },
+    "36:28": {
+        "title": "Hizb 45: Wa-Mali",
+        "id": 45
+    },
+    "37:145": {
+        "title": "Hizb 46",
+        "id": 46
+    },
+    "39:32": {
+        "title": "Hizb 47: Fa-man ’aẓlamu",
+        "id": 47
+    },
+    "40:41": {
+        "title": "Hizb 48",
+        "id": 48
+    },
+    "41:47": {
+        "title": "Hizb 49: Ilayhi yuraddu",
+        "id": 49
+    },
+    "43:24": {
+        "title": "Hizb 50",
+        "id": 50
+    },
+    "46:1": {
+        "title": "Hizb 51: Ḥā’ Mīm",
+        "id": 51
+    },
+    "48:18": {
+        "title": "Hizb 52",
+        "id": 52
+    },
+    "51:31": {
+        "title": "Hizb 53: Qāla fa-mā khaṭbukum",
+        "id": 53
+    },
+    "55:1": {
+        "title": "Hizb 54",
+        "id": 54
+    },
+    "58:1": {
+        "title": "Hizb 55: Qad samiʿa ’llāhu",
+        "id": 55
+    },
+    "62:1": {
+        "title": "Hizb 56",
+        "id": 56
+    },
+    "67:1": {
+        "title": "Hizb 57: Tabāraka ’lladhī",
+        "id": 57
+    },
+    "72:1": {
+        "title": "Hizb 58",
+        "id": 58
+    },
+    "78:1": {
+        "title": "Hizb 59: ‘Amma",
+        "id": 59
+    },
+    "87:1": {
+        "title": "Hizb 60",
+        "id": 60
+    }
+}

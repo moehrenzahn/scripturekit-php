@@ -23,7 +23,12 @@ class VerseRequest
     /**
      * @var int
      */
-    private $chapter;
+    private $startChapter;
+
+    /**
+     * @var int
+     */
+    private $endChapter;
 
     /**
      * @var int
@@ -31,9 +36,14 @@ class VerseRequest
     private $collection;
 
     /**
-     * @var int[]
+     * @var ?int
      */
-    private $verses;
+    private $startVerse;
+
+    /**
+     * @var ?int
+     */
+    private $endVerse;
 
     /**
      * @var bool
@@ -79,9 +89,11 @@ class VerseRequest
      * VerseRequest constructor.
      *
      * @param int|null $bookNumber
-     * @param int      $chapter
+     * @param int      $startChapter
+     * @param int      $endChapter
      * @param int      $collection
-     * @param int[]    $verses
+     * @param int      $startVerse
+     * @param int      $endVerse
      * @param bool     $showAnnotations
      * @param bool     $inferLinebreaks
      * @param int[]    $highlightedVerses
@@ -93,9 +105,11 @@ class VerseRequest
      */
     public function __construct(
         ?int $bookNumber,
-        int $chapter,
+        int $startChapter,
+        int $endChapter,
         int $collection,
-        array $verses,
+        ?int $startVerse,
+        ?int $endVerse,
         bool $showAnnotations,
         bool $inferLinebreaks,
         array $highlightedVerses,
@@ -106,9 +120,11 @@ class VerseRequest
         string $chapterVerseSeparator
     ) {
         $this->bookNumber = $bookNumber;
-        $this->chapter = $chapter;
+        $this->startChapter = $startChapter;
+        $this->endChapter = $endChapter;
         $this->collection = $collection;
-        $this->verses = $verses;
+        $this->startVerse = $startVerse;
+        $this->endVerse = $endVerse;
         $this->showAnnotations = $showAnnotations;
         $this->inferLinebreaks = $inferLinebreaks;
         $this->highlightedVerses = $highlightedVerses;
@@ -118,7 +134,6 @@ class VerseRequest
         $this->quranChapterNames = $quranChapterNames;
         $this->chapterVerseSeparator = $chapterVerseSeparator;
     }
-
 
     /**
      * Book number is not applicable for quran verses
@@ -131,11 +146,54 @@ class VerseRequest
     }
 
     /**
+     * @deprecated
+     *
      * @return int
      */
     public function getChapter(): int
     {
-        return $this->chapter;
+        return $this->startChapter;
+    }
+
+    /**
+     *
+     * @return int[]
+     */
+    public function getChapters(): array
+    {
+        return range($this->startChapter, $this->endChapter);
+    }
+
+    /**
+     * @return int
+     */
+    public function getStartChapter(): int
+    {
+        return $this->startChapter;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEndChapter(): int
+    {
+        return $this->endChapter;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getStartVerse(): ?int
+    {
+        return $this->startVerse;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getEndVerse(): ?int
+    {
+        return $this->endVerse;
     }
 
     /**
@@ -144,14 +202,6 @@ class VerseRequest
     public function getCollection(): int
     {
         return $this->collection;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getVerses(): array
-    {
-        return $this->verses;
     }
 
     /**

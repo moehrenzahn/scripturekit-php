@@ -3,89 +3,35 @@
 namespace Moehrenzahn\ScriptureKit\Renderer;
 
 use Moehrenzahn\ScriptureKit\Data\RenderedVerse;
-use Moehrenzahn\ScriptureKit\Data\VerseRequest;
-use Moehrenzahn\ScriptureKit\Data\Version;
-use RuntimeException;
+use Moehrenzahn\ScriptureKit\Data\VerseData;
 
 class VerseRenderer
 {
-    /**
-     * @var ReferenceRendererInterface
-     */
-    private $referenceRenderer;
-
     /**
      * @var VerseTextRendererInterface
      */
     private $verseTextRenderer;
 
-    /**
-     * @var Names
-     */
-    private $names;
-
     public function __construct(
-        ReferenceRendererInterface $referenceRenderer,
-        VerseTextRendererInterface $verseTextRenderer,
-        Names $names
+        VerseTextRendererInterface $verseTextRenderer
     ) {
-        $this->referenceRenderer = $referenceRenderer;
         $this->verseTextRenderer = $verseTextRenderer;
-        $this->names = $names;
     }
 
-    public function render(VerseRequest $verseRequest, Version $version): RenderedVerse
+    public function render(VerseData $verseData): RenderedVerse
     {
-        $errors = [];
-
-        $compactReference = $this->referenceRenderer->getShortReference($verseRequest);
-        $reference = $this->referenceRenderer->getMediumReference($verseRequest);
-        $fullReference = $this->referenceRenderer->getLongReference($verseRequest);
-
-        if (!$compactReference || !$fullReference || !$reference) {
-            $errors[] = 'Verse reference not available';
-        }
-        $bookName = $this->getBookName($verseRequest, $version);
-        $chapterName = $this->getChapterName($verseRequest, $version);
-        try {
-            $text = $this->verseTextRenderer->render($verseRequest, $version);
-        } catch (RuntimeException $e) {
-            $text = '';
-            $errors[] = $e->getMessage();
-        }
+        $text = $this->verseTextRenderer->render($verseData->getPieces(), $verseData->getVerseRequest());
 
         return new RenderedVerse(
-            $verseRequest,
-            $version,
-            $bookName,
-            $chapterName,
+            $verseData->getVerseRequest(),
+            $verseData->getVersion(),
+            $verseData->getBookName(),
+            $verseData->getChapterName(),
             $text,
-            $compactReference,
-            $reference,
-            $fullReference,
-            $errors
+            $verseData->getCompactReference(),
+            $verseData->getReference(),
+            $verseData->getFullReference(),
+            $verseData->getErrors()
         );
-    }
-
-    private function getBookName(VerseRequest $verseRequest, Version $version): string
-    {
-        $bookName = '';
-        if ($version->getType() === Version::TYPE_TANAKH) {
-            $bookName = $this->names->getTanakhBookName($verseRequest->getBookNumber());
-        } elseif ($version->getType() === Version::TYPE_BIBLE) {
-            $bookName = $this->names->getBibleBookName($verseRequest->getBookNumber());
-        }
-
-        return $bookName;
-    }
-
-    private function getChapterName(VerseRequest $verseRequest, Version $version): string
-    {
-        $chapterName = '';
-        if ($version->getType() === Version::TYPE_QURAN) {
-            $chapterName = $this->names->getQuranChapterName($verseRequest->getChapter());
-        }
-
-        return $chapterName;
     }
 }

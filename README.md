@@ -67,9 +67,9 @@ $version = new \Moehrenzahn\ScriptureKit\Data\Version($filePath, $type, $availab
 $service = new \Moehrenzahn\ScriptureKit\Service($version);
 
 $verseRequestBuilder = new \Moehrenzahn\ScriptureKit\VerseRequestBuilder(
-    3, // Number of the chapter to load,
-    [16], // List of verses to load. Can be non-consecutive
-    Moehrenzahn\ScriptureKit\Data\VerseRequest::COLLECTION_NT // Collection from which to load the verse (Tanakh, OT, NT, or Quran) 
+    3, // Number of the start chapter to load,
+    Moehrenzahn\ScriptureKit\Data\VerseRequest::COLLECTION_NT, // Collection from which to load the verse (Tanakh, OT, NT, or Quran)
+    16 // Start verse to load 
 );
 // Number of the Book to load (if collection is not Quran). First book starts at 1 (Matthew)
 $verseRequestBuilder->setBookNumber(4); 
@@ -114,7 +114,7 @@ Your configured strings will be used when generating verse references.
 ```php
 $version = new \Moehrenzahn\ScriptureKit\Data\Version($filePath, $type, $availableCollections);
 $service = new \Moehrenzahn\ScriptureKit\Service($version);
-$requestBuilder = new \Moehrenzahn\ScriptureKit\VerseRequestBuilder($chapterNumber, $verses, $collection);
+$requestBuilder = new \Moehrenzahn\ScriptureKit\VerseRequestBuilder($chapterNumber, $collection, $startVerse, $endVerse, $endChapter);
 
 $requestBuilder->setChapterVerseSeparator(',');
 $requestBuilder->setTanakhBookNames(\Moehrenzahn\ScriptureKit\Util\TanakhBookNames::BOOK_NAMES);

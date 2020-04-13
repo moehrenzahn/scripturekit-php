@@ -3,6 +3,10 @@
 namespace Moehrenzahn\ScriptureKit\Parser;
 
 use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
+use Moehrenzahn\ScriptureKit\Data\VerseRequest;
+use Moehrenzahn\ScriptureKit\Renderer\Names;
+use Moehrenzahn\ScriptureKit\Renderer\ReferenceRendererInterface;
+use Moehrenzahn\ScriptureKit\VerseRequestBuilder;
 use RuntimeException;
 use SimpleXMLElement;
 
@@ -13,23 +17,30 @@ use SimpleXMLElement;
  */
 class QuranParser implements ParserInterface
 {
+
     const TYPE_MAP = [
         'Verse' => ScripturePiece::TYPE_CONTENT,
     ];
 
+    /**
+     * @var string[][]
+     */
+    private $hizb;
     /**
      * @var XMLParser
      */
     private $xmlParser;
 
     /**
-     * QuranParser constructor.
-     *
-     * @param XMLParser $xmlParser
+     * @var ReferenceRendererInterface
      */
-    public function __construct(XMLParser $xmlParser)
+    private $referenceRenderer;
+
+    public function __construct(XMLParser $xmlParser, ReferenceRendererInterface $referenceRenderer)
     {
         $this->xmlParser = $xmlParser;
+        $this->hizb = json_decode(file_get_contents(__DIR__ . '/../../files/quran-hizb.json'), true);
+        $this->referenceRenderer = $referenceRenderer;
     }
 
     public function loadVerseText(
@@ -51,8 +62,7 @@ class QuranParser implements ParserInterface
                 )
             );
         }
-
-        return $this->convertNodes($xmlElements)[0];
+        return $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP)[0];
     }
 
     /**
@@ -84,7 +94,9 @@ class QuranParser implements ParserInterface
             );
         }
 
-        return $this->convertNodes($xmlElements);
+        $pieces = $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP);
+
+        return $this->insertPieces($pieces, $chapter);
     }
 
     /**
@@ -112,7 +124,60 @@ class QuranParser implements ParserInterface
             );
         }
 
-        return $this->convertNodes($xmlElements);
+        $pieces = $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP);
+
+        return $this->insertPieces($pieces, $chapter);
+    }
+
+    /**
+     * @param string $filePath
+     * @param int|null $startBookNumber
+     * @param int    $startChapter
+     * @param int    $startVerse
+     * @param int|null $endBookNumber
+     * @param int    $endChapter
+     * @param int    $endVerse
+     *
+     * @return ScripturePiece[]
+     */
+    public function loadVerseRange(
+        string $filePath,
+        ?int $startBookNumber,
+        int $startChapter,
+        int $startVerse,
+        ?int $endBookNumber,
+        int $endChapter,
+        int $endVerse
+    ): array {
+        $xml = $this->xmlParser->getXMLObject($filePath);
+
+        $chapterRange = range($startChapter, $endChapter);
+        $result = [];
+        foreach ($chapterRange as $chapter) {
+            $isFirstChapter = $chapter === $startChapter;
+            $isLastChapter = $chapter === $endChapter;
+
+            if ($isFirstChapter) {
+                $verseRange = range($startVerse, 176);
+            } elseif ($isLastChapter) {
+                $verseRange = range(1, $endVerse);
+            } else {
+                $verseRange = range(1, 176);
+            }
+
+            $verseStatement = "@VerseID='" . implode("' or @VerseID='", $verseRange) . "'";
+            $xmlElements = $xml->xpath("Chapter[@ChapterID='$chapter']/Verse[$verseStatement]");
+            $pieces = $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP);
+            $result = array_merge(
+                $result,
+                $this->insertPieces($pieces, $chapter)
+            );
+        }
+
+        if (empty($result)) {
+            throw new RuntimeException('Verses are not included in this version.');
+        }
+        return $result;
     }
 
     /**
@@ -150,12 +215,34 @@ class QuranParser implements ParserInterface
     }
 
     /**
-     * @param SimpleXMLElement[] $xmlElements
-     *
+     * @param ScripturePiece[] $pieces
+     * @param int              $chapter
      * @return ScripturePiece[]
      */
-    private function convertNodes(array $xmlElements): array
+    private function insertPieces(array $pieces, int $chapter): array
     {
-        return $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP);
+        $result = [];
+        foreach ($pieces as $piece) {
+            if ($piece->getPieceId() === 1) {
+                $result[] = new ScripturePiece(
+                    ScripturePiece::TYPE_CHAPTER_TITLE,
+                    0,
+                    $this->referenceRenderer->getChapterName(VerseRequest::COLLECTION_QURAN, $chapter, true),
+                    []
+                );
+            }
+
+            $hizb = $this->hizb[$chapter . ':' . $piece->getPieceId()] ?? null;
+            if ($hizb) {
+                $result[] = new ScripturePiece(
+                    ScripturePiece::TYPE_CAPTION,
+                    $hizb['id'],
+                    $hizb['title'],
+                    []
+                );
+            }
+            $result[] = $piece;
+        }
+        return $result;
     }
 }

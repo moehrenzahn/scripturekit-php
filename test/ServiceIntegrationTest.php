@@ -52,11 +52,11 @@ class ServiceIntegrationTest extends TestCase
                 'collection' => VerseRequest::COLLECTION_QURAN,
                 'book' => null,
                 'chapter' => 1,
-                'verses' => [1,2],
+                'verses' => [2,3],
                 'highlightedVerses' => [2],
                 'returnHtml' => false,
-                'expectedLongReference' => 'Al-Fatihah (Surah 1) 1–2',
-                'expectedText' => 'In the Name of God, the Merciful, the Compassionate Praise belongs to God, the Lord of all Being.'
+                'expectedLongReference' => 'Al-Fatihah (Surah 1) 2–3',
+                'expectedText' => 'Praise belongs to God, the Lord of all Being, the All-merciful, the All-compassionate.'
             ],
             'quran html' => [
                 'versionPath' => __DIR__ . '/files/A. J. Arberry.xml',
@@ -64,19 +64,19 @@ class ServiceIntegrationTest extends TestCase
                 'collection' => VerseRequest::COLLECTION_QURAN,
                 'book' => null,
                 'chapter' => 1,
-                'verses' => [1,2],
+                'verses' => [2,3],
                 'highlightedVerses' => [2],
                 'returnHtml' => true,
-                'expectedLongReference' => 'Al-Fatihah <span class=\'name-alt\'>(Surah 1)</span> 1–2',
+                'expectedLongReference' => 'Al-Fatihah <span class=\'name-alt\'>(Surah 1)</span> 2–3',
                 'expectedText' => '<p>
-<span
-    class="1"
-    data-versenumber="1">
-    In the Name of God, the Merciful, the Compassionate</span>
 <span
     class="highlight 2"
     data-versenumber="2">
-    Praise belongs to God, the Lord of all Being.</span>
+    Praise belongs to God, the Lord of all Being,</span>
+<span
+    class="3"
+    data-versenumber="3">
+    the All-merciful, the All-compassionate.</span>
 </p>'
             ],
             'quran single verse text' => [
@@ -151,7 +151,7 @@ class ServiceIntegrationTest extends TestCase
         $version = new Version($versionName, $versionPath, $versionType, $versionAvailableCollections);
         $subject = new Service($version);
 
-        $verseRequestBuilder = new VerseRequestBuilder($chapter, $verses, $collection);
+        $verseRequestBuilder = new VerseRequestBuilder($chapter, $collection, $verses[0], $verses[1] ?? null);
         $verseRequestBuilder->setBookNumber($book);
         $verseRequestBuilder->setHighlightedVerses($highlightedVerses);
         $verseRequestBuilder->setReturnHtml($returnHtml);
@@ -169,6 +169,39 @@ class ServiceIntegrationTest extends TestCase
             $expectedLongReference,
             $verse->getFullReference()
         );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testCreateVerseData(
+        string $versionPath,
+        int $versionType,
+        int $collection,
+        ?int $book,
+        int $chapter,
+        array $verses,
+        array $highlightedVerses,
+        bool $returnHtml,
+        string $expectedLongReference,
+        string $expectedText
+    ) {
+        $versionName = 'Test Version Name';
+        $versionAvailableCollections = [$collection];
+
+        $version = new Version($versionName, $versionPath, $versionType, $versionAvailableCollections);
+        $subject = new Service($version);
+
+        $verseRequestBuilder = new VerseRequestBuilder($chapter, $collection, $verses[0], $verses[1] ?? null);
+        $verseRequestBuilder->setBookNumber($book);
+        $verseRequestBuilder->setHighlightedVerses($highlightedVerses);
+        $verseRequestBuilder->setReturnHtml($returnHtml);
+
+        $request = $verseRequestBuilder->build();
+
+        $result = $subject->createVerseData($request);
+
+        self::assertCount(count($verses), $result->getPieces());
     }
 
     /**

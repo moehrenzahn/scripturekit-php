@@ -15,12 +15,16 @@ class SefariaParser implements ParserInterface
         5 => "Deuteronomy",
         6 => "Joshua",
         7 => "Judges",
+        8 => "Ruth",
         9 => "II Samuel",
         10 => "II Samuel",
         11 => "I Kings",
         12 => "II Kings",
         13 => "I Chronicles",
         14 => "II Chronicles",
+        15 => "Ezra",
+        16 => "Nehemia",
+        17 => "Esther",
         18 => "Job",
         19 => "Psalms",
         20 => "Proverbs",
@@ -30,12 +34,17 @@ class SefariaParser implements ParserInterface
         24 => "Jeremiah",
         25 => "Lamentations",
         26 => "Ezekiel",
+        27 => "Daniel",
         28 => "Hosea",
+        29 => "Joel",
+        30 => "Amos",
         31 => "Obadiah",
+        32 => "Jonah",
         33 => "Micah",
         34 => "Nahum",
         35 => "Habakkuk",
         36 => "Zephaniah",
+        37 => "Haggai",
         38 => "Zechariah",
         39 => "Malachi",
     ];
@@ -125,6 +134,76 @@ class SefariaParser implements ParserInterface
             }
 
             $result[] = new ScripturePiece(ScripturePiece::TYPE_CONTENT, $verse, $text, []);
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $filePath
+     * @param int|null $startBookNumber
+     * @param int    $startChapter
+     * @param int    $startVerse
+     * @param int|null $endBookNumber
+     * @param int    $endChapter
+     * @param int    $endVerse
+     * @throws RuntimeException
+     *
+     * @return ScripturePiece[]
+     */
+    public function loadVerseRange(
+        string $filePath,
+        ?int $startBookNumber,
+        int $startChapter,
+        int $startVerse,
+        ?int $endBookNumber,
+        int $endChapter,
+        int $endVerse
+    ): array {
+        $json = json_decode(file_get_contents($filePath), true);
+        if (!$json) {
+            throw new RuntimeException("Could not parse version file at '$filePath'.");
+        }
+
+        $bookRange = range($startBookNumber, $endBookNumber);
+
+        $result = [];
+
+        foreach ($bookRange as $bookNumber) {
+            $isFirstBook = $bookNumber === $startBookNumber;
+            $isLastBook = $bookNumber === $endBookNumber;
+            if ($isFirstBook) {
+                $chapterRange = range($startChapter, 200);
+            } elseif ($isLastBook) {
+                $chapterRange = range(1, $endChapter);
+            } else {
+                $chapterRange = range(1, 200);
+            }
+
+            foreach ($chapterRange as $chapter) {
+                $isFirstChapter = $isFirstBook && $chapter === $startChapter;
+                $isLastChapter = $isLastBook && $chapter === $endChapter;
+
+                if ($isFirstChapter) {
+                    $verseRange = range($startVerse, 200);
+                } elseif ($isLastChapter) {
+                    $verseRange = range(1, $endVerse);
+                } else {
+                    $verseRange = range(1, 200);
+                }
+
+                foreach ($verseRange as $verse) {
+                    $text = $json[self::BOOK_NUMBER_NAME[$bookNumber]]['text'][$chapter-1][$verse-1] ?? null;
+                    if (!$text) {
+                        break;
+                    }
+
+                    $result[] = new ScripturePiece(ScripturePiece::TYPE_CONTENT, $verse, $text, []);
+                }
+            }
+        }
+
+        if (empty($result)) {
+            throw new RuntimeException('Verses are not included in this version.');
         }
         return $result;
     }

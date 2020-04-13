@@ -70,7 +70,7 @@ class QuranChapterNames
         62 => "Al-Jumu`ah",
         63 => "Al-Munafiqun",
         64 => "At-Taghabun",
-        65 => "At-Talaq,",
+        65 => "At-Talaq",
         66 => "At-Tahrim",
         67 => "Al-Mulk",
         68 => "Al-Qalam",
