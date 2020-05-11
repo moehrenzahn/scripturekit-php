@@ -2,13 +2,15 @@
 
 namespace Moehrenzahn\ScriptureKit\Data;
 
+use JsonSerializable;
+
 /**
  * Class Version
  *
  * Representation of an XML Bible, Tanakh or Quran from
  * the Zefania XML project or qurandatabase.org.
  */
-class Version
+class Version implements JsonSerializable
 {
     public const TYPE_TANAKH = 0;
     public const TYPE_TANAKH_SEFARIA = 3;
@@ -48,7 +50,7 @@ class Version
      * Version constructor.
      *
      * @param string $name                  The title of the version
-     * @param string $filePath               The path to the xml file with the version source
+     * @param string $filePath              The path to the xml file with the version source
      * @param int    $type                  The type of version, see self::TYPE_*
      * @param int[] $availableCollections   The collections that are part of the version, see
      *                                      Moehrenzahn\ScriptureKit\Data\VerseRequest::COLLECTION_*
@@ -65,25 +67,16 @@ class Version
         $this->availableCollections = $availableCollections;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getFilePath(): string
     {
         return $this->filePath;
     }
 
-    /**
-     * @return int
-     */
     public function getType(): int
     {
         return $this->type;
@@ -95,5 +88,15 @@ class Version
     public function getAvailableCollections(): array
     {
         return $this->availableCollections;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'filePath' => $this->getFilePath(),
+            'type' => $this->getType(),
+            'availableCollections' => $this->getAvailableCollections(),
+        ];
     }
 }

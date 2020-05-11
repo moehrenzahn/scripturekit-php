@@ -2,13 +2,15 @@
 
 namespace Moehrenzahn\ScriptureKit\Data;
 
+use JsonSerializable;
+
 /**
  * Contains information needed to render a verse.
  *
  * Use \Moehrenzahn\ScriptureKit\VerseRequestBuilder to create
  *
  */
-class VerseRequest
+class VerseRequest implements JsonSerializable
 {
     const COLLECTION_TANAKH = 0;
     const COLLECTION_OT = 1;
@@ -266,5 +268,25 @@ class VerseRequest
     public function getChapterVerseSeparator(): string
     {
         return $this->chapterVerseSeparator;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'bookNumber' => $this->getBookNumber(),
+            'startChapter' => $this->getStartChapter(),
+            'endChapter' => $this->getEndChapter(),
+            'collection' => $this->getCollection(),
+            'startVerse' => $this->getstartVerse(),
+            'endVerse' => $this->getendVerse(),
+            'showAnnotations' => $this->isShowAnnotations(),
+            'inferLinebreaks' => $this->isInferLinebreaks(),
+            'highlightedVerses' => $this->getHighlightedVerses(),
+            'returnHtml' => $this->isReturnHtml(),
+            'tanachBookNames' => $this->getTanachBookNames(),
+            'bibleBookNames' => $this->getBibleBookNames(),
+            'quranChapterNames' => $this->getQuranChapterNames(),
+            'chapterVerseSeparator' => $this->getChapterVerseSeparator(),
+        ];
     }
 }

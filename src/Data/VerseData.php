@@ -2,7 +2,9 @@
 
 namespace Moehrenzahn\ScriptureKit\Data;
 
-class VerseData
+use JsonSerializable;
+
+class VerseData implements JsonSerializable
 {
     /**
      * @var VerseRequest
@@ -138,5 +140,20 @@ class VerseData
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'verseRequest' => $this->getVerseRequest(),
+            'version' => $this->getVersion(),
+            'bookName' => $this->getBookName(),
+            'chapterName' => $this->getChapterName(),
+            'pieces' => $this->getPieces(),
+            'compactReference' => $this->getCompactReference(),
+            'reference' => $this->getReference(),
+            'fullReference' => $this->getFullReference(),
+            'errors' => $this->getErrors(),
+        ];
     }
 }

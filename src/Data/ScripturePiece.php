@@ -2,6 +2,7 @@
 
 namespace Moehrenzahn\ScriptureKit\Data;
 
+use JsonSerializable;
 use RuntimeException;
 
 /**
@@ -10,7 +11,7 @@ use RuntimeException;
  *
  * @package Moehrenzahn\ScriptureKit\Data
  */
-class ScripturePiece
+class ScripturePiece implements JsonSerializable
 {
     public const TYPE_LINEBREAK = 'br';
     public const TYPE_STYLED = 'style';
@@ -104,5 +105,15 @@ class ScripturePiece
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'type' => $this->getType(),
+            'pieceId' => $this->getPieceId(),
+            'content' => $this->getContent(),
+            'attributes' => $this->getAttributes(),
+        ];
     }
 }
