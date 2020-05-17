@@ -283,9 +283,9 @@ class VerseRequest implements JsonSerializable
             'inferLinebreaks' => $this->isInferLinebreaks(),
             'highlightedVerses' => $this->getHighlightedVerses(),
             'returnHtml' => $this->isReturnHtml(),
-            'tanachBookNames' => $this->getTanachBookNames(),
-            'bibleBookNames' => $this->getBibleBookNames(),
-            'quranChapterNames' => $this->getQuranChapterNames(),
+            'tanachBookNames' => (object) $this->getTanachBookNames(),
+            'bibleBookNames' => (object) $this->getBibleBookNames(),
+            'quranChapterNames' => (object) $this->getQuranChapterNames(),
             'chapterVerseSeparator' => $this->getChapterVerseSeparator(),
         ];
     }

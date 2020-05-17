@@ -113,7 +113,7 @@ class ScripturePiece implements JsonSerializable
             'type' => $this->getType(),
             'pieceId' => $this->getPieceId(),
             'content' => $this->getContent(),
-            'attributes' => $this->getAttributes(),
+            'attributes' => $this->getAttributes() ?: \json_decode('{}'),
         ];
     }
 }
