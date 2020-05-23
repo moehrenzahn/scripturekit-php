@@ -55,6 +55,11 @@ class VerseRequest implements JsonSerializable
     /**
      * @var bool
      */
+    private $showHeadings;
+
+    /**
+     * @var bool
+     */
     private $inferLinebreaks;
 
     /**
@@ -97,6 +102,7 @@ class VerseRequest implements JsonSerializable
      * @param int      $startVerse
      * @param int      $endVerse
      * @param bool     $showAnnotations
+     * @param bool     $showHeadings
      * @param bool     $inferLinebreaks
      * @param int[]    $highlightedVerses
      * @param bool     $returnHtml
@@ -113,6 +119,7 @@ class VerseRequest implements JsonSerializable
         ?int $startVerse,
         ?int $endVerse,
         bool $showAnnotations,
+        bool $showHeadings,
         bool $inferLinebreaks,
         array $highlightedVerses,
         bool $returnHtml,
@@ -128,6 +135,7 @@ class VerseRequest implements JsonSerializable
         $this->startVerse = $startVerse;
         $this->endVerse = $endVerse;
         $this->showAnnotations = $showAnnotations;
+        $this->showHeadings = $showHeadings;
         $this->inferLinebreaks = $inferLinebreaks;
         $this->highlightedVerses = $highlightedVerses;
         $this->returnHtml = $returnHtml;
@@ -217,6 +225,14 @@ class VerseRequest implements JsonSerializable
     /**
      * @return bool
      */
+    public function isShowHeadings(): bool
+    {
+        return $this->showHeadings;
+    }
+
+    /**
+     * @return bool
+     */
     public function isInferLinebreaks(): bool
     {
         return $this->inferLinebreaks;
@@ -280,6 +296,7 @@ class VerseRequest implements JsonSerializable
             'startVerse' => $this->getstartVerse(),
             'endVerse' => $this->getendVerse(),
             'showAnnotations' => $this->isShowAnnotations(),
+            'showHeadings' => $this->isShowHeadings(),
             'inferLinebreaks' => $this->isInferLinebreaks(),
             'highlightedVerses' => $this->getHighlightedVerses(),
             'returnHtml' => $this->isReturnHtml(),
@@ -289,4 +306,5 @@ class VerseRequest implements JsonSerializable
             'chapterVerseSeparator' => $this->getChapterVerseSeparator(),
         ];
     }
+
 }

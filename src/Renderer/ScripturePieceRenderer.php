@@ -21,7 +21,9 @@ class ScripturePieceRenderer implements ScripturePieceRendererInterface
             if ($piece->getType() === ScripturePiece::TYPE_LINEBREAK) {
                 $result[] = PHP_EOL . PHP_EOL;
             } elseif ($piece->getType() === ScripturePiece::TYPE_CAPTION) {
-                $result[] = PHP_EOL . PHP_EOL . $piece->getContent() . PHP_EOL . PHP_EOL;
+                if ($verseRequest->isShowHeadings()) {
+                    $result[] = PHP_EOL . PHP_EOL . $piece->getContent() . PHP_EOL . PHP_EOL;
+                }
             } elseif (in_array($piece->getType(), [ScripturePiece::TYPE_STYLED, ScripturePiece::TYPE_CONTENT])) {
                 $result[] = $piece->getContent();
             } elseif (in_array($piece->getType(), [ScripturePiece::TYPE_REF, ScripturePiece::TYPE_SUPERSCRIPT, ScripturePiece::TYPE_NOTE])) {

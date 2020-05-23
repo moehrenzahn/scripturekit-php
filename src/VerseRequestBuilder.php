@@ -53,6 +53,11 @@ class VerseRequestBuilder
     /**
      * @var bool
      */
+    private $showCaptions = true;
+
+    /**
+     * @var bool
+     */
     private $inferLinebreaks = true;
 
     /**
@@ -148,6 +153,14 @@ class VerseRequestBuilder
     }
 
     /**
+     * @param bool $showCaptions
+     */
+    public function setShowCaptions(bool $showCaptions): void
+    {
+        $this->showCaptions = $showCaptions;
+    }
+
+    /**
      * @param bool $inferLinebreaks
      */
     public function setInferLinebreaks(bool $inferLinebreaks): void
@@ -214,6 +227,7 @@ class VerseRequestBuilder
             $this->startVerse,
             $this->endVerse,
             $this->showAnnotations,
+            $this->showCaptions,
             $this->inferLinebreaks,
             $this->highlightedVerses,
             $this->returnHtml,
@@ -223,4 +237,5 @@ class VerseRequestBuilder
             $this->chapterVerseSeparator
         );
     }
+
 }
