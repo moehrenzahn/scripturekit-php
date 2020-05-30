@@ -53,6 +53,7 @@ class VerseTextRenderer implements VerseTextRendererInterface
         $startChapter = $verseRequest->getStartChapter();
         $endChapter = $verseRequest->getEndChapter();
 
+
         if ($startChapter === $endChapter) {
             $chapter = $startChapter;
             if ($startVerse) {
@@ -93,6 +94,10 @@ class VerseTextRenderer implements VerseTextRendererInterface
             }
         }
 
+        if ($verseRequest->getHighlightedVerses()) {
+            $pieces = $this->addHighlights($pieces, $verseRequest);
+        }
+
         if ($verseRequest->isInferLinebreaks()) {
             $pieces = $this->addLineBreaks($pieces);
         }
@@ -115,6 +120,21 @@ class VerseTextRenderer implements VerseTextRendererInterface
      * @param ScripturePiece[] $pieces
      * @return ScripturePiece[]
      */
+    private function addHighlights(array $pieces, VerseRequest $request): array
+    {
+        foreach ($pieces as $piece) {
+            if (in_array($piece->getVerse(), $request->getHighlightedVerses())) {
+                $piece->setHighlighted(true);
+            }
+        }
+
+        return $pieces;
+    }
+
+    /**
+     * @param ScripturePiece[] $pieces
+     * @return ScripturePiece[]
+     */
     private function addLineBreaks(array $pieces): array
     {
         $result = [];
@@ -124,7 +144,7 @@ class VerseTextRenderer implements VerseTextRendererInterface
             /** @var ScripturePiece $piece */
             $piece = array_shift($pieces);
             if ($this->startsSentence($piece) && !$sentenceInProgress) {
-                $result[] = new ScripturePiece(ScripturePiece::TYPE_LINEBREAK, 0, '', []);
+                $result[] = ScripturePiece::createLinebreak();
                 $sentenceInProgress = true;
             }
             if ($this->endsSentence($piece)) {

@@ -57,7 +57,11 @@ class ZefaniaParser implements ParserInterface
             throw new RuntimeException('Verse is not included in this version.');
         }
 
-        return $this->convertNodes($xmlElements)[0];
+        $piece = $this->convertNodes($xmlElements)[0];
+        $piece->setBookNumber($chapter);
+        $piece->setChapter($chapter);
+
+        return $piece;
     }
 
     /**
@@ -84,7 +88,14 @@ class ZefaniaParser implements ParserInterface
             throw new RuntimeException('Verses are not included in this version.');
         }
 
-        return $this->convertNodes($xmlElements);
+        $pieces = $this->convertNodes($xmlElements);
+
+        foreach ($pieces as $piece) {
+            $piece->setBookNumber($bookNumber);
+            $piece->setChapter($chapter);
+        }
+
+        return $pieces;
     }
 
     /**
@@ -107,7 +118,14 @@ class ZefaniaParser implements ParserInterface
             throw new RuntimeException('Chapter is not included in this version.');
         }
 
-        return $this->convertNodes($xmlElements);
+        $pieces = $this->convertNodes($xmlElements);
+
+        foreach ($pieces as $piece) {
+            $piece->setBookNumber($bookNumber);
+            $piece->setChapter($chapter);
+        }
+
+        return $pieces;
     }
 
     /**

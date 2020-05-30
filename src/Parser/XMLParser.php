@@ -42,6 +42,8 @@ class XMLParser
     }
 
     /**
+     * Warning: This method will not add correct book numbers and chapters to ScripturePiece objects.
+     *
      * @param SimpleXMLElement[] $xmlElements
      * @param string $idAttributeKey
      * @param string[] $typeMap
@@ -72,7 +74,11 @@ class XMLParser
             $pieces[] = new ScripturePiece(
                 $typeMap[$element->getName()],
                 (int)$element->attributes()[$idAttributeKey],
+                null,
+                null,
+                (int)$element->attributes()[$idAttributeKey],
                 $content,
+                false,
                 $attributes
             );
 

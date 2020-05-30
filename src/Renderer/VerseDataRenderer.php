@@ -38,13 +38,6 @@ class VerseDataRenderer
     {
         $errors = [];
 
-        $compactReference = $this->referenceRenderer->getShortReference($verseRequest);
-        $reference = $this->referenceRenderer->getMediumReference($verseRequest);
-        $fullReference = $this->referenceRenderer->getLongReference($verseRequest);
-
-        if (!$compactReference || !$fullReference || !$reference) {
-            $errors[] = 'Verse reference not available';
-        }
         $bookName = $this->referenceRenderer->getBookName(
             $verseRequest->getCollection(),
             $verseRequest->getBookNumber(),
@@ -62,6 +55,15 @@ class VerseDataRenderer
             $pieces = [];
             $errors[] = $e->getMessage();
         }
+
+        $compactReference = $this->referenceRenderer->getShortReference($verseRequest);
+        $reference = $this->referenceRenderer->getMediumReference($verseRequest);
+        $fullReference = $this->referenceRenderer->getLongReference($verseRequest);
+
+        if (!$compactReference || !$fullReference || !$reference) {
+            $errors[] = 'Verse reference not available';
+        }
+
 
         return new VerseData(
             $verseRequest,

@@ -47,9 +47,29 @@ class ScripturePiece implements JsonSerializable
     private $pieceId;
 
     /**
+     * @var int|null
+     */
+    private $bookNumber;
+
+    /**
+     * @var int|null
+     */
+    private $chapter;
+
+    /**
+     * @var int|null
+     */
+    private $verse;
+
+    /**
      * @var string
      */
     private $content;
+
+    /**
+     * @var bool
+     */
+    private $highlighted;
 
     /**
      * @var string[]
@@ -57,46 +77,73 @@ class ScripturePiece implements JsonSerializable
     private $attributes;
 
     /**
-     * ScripturePiece constructor.
-     *
-     * @param string   $type
-     * @param int      $pieceId
-     * @param string   $content
      * @param string[] $attributes
      */
-    public function __construct(string $type, int $pieceId, string $content, array $attributes)
-    {
+    public function __construct(
+        string $type,
+        int $pieceId,
+        ?int $bookNumber,
+        ?int $chapter,
+        ?int $verse,
+        string $content,
+        bool $highlighted,
+        array $attributes
+    ) {
         if (!in_array($type, self::TYPES)) {
-            throw new RuntimeException("Unknown ScripturePart type '$type' given");
+            throw new RuntimeException("Unknown ScripturePiece type '$type' given");
         }
         $this->type = $type;
         $this->pieceId = $pieceId;
+        $this->bookNumber = $bookNumber;
+        $this->chapter = $chapter;
+        $this->verse = $verse;
         $this->content = $content;
+        $this->highlighted = $highlighted;
         $this->attributes = $attributes;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return int
-     */
     public function getPieceId(): int
     {
         return $this->pieceId;
     }
 
     /**
-     * @return string
+     * @return int|null
      */
+    public function getBookNumber(): ?int
+    {
+        return $this->bookNumber;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getChapter(): ?int
+    {
+        return $this->chapter;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getVerse(): ?int
+    {
+        return $this->verse;
+    }
+
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function isHighlighted(): bool
+    {
+        return $this->highlighted;
     }
 
     /**
@@ -107,13 +154,74 @@ class ScripturePiece implements JsonSerializable
         return $this->attributes;
     }
 
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function setPieceId(int $pieceId): void
+    {
+        $this->pieceId = $pieceId;
+    }
+
+    public function setBookNumber(?int $bookNumber): void
+    {
+        $this->bookNumber = $bookNumber;
+    }
+
+    public function setChapter(?int $chapter): void
+    {
+        $this->chapter = $chapter;
+    }
+
+    public function setVerse(?int $verse): void
+    {
+        $this->verse = $verse;
+    }
+
+    public function setContent(string $content): void
+    {
+        $this->content = $content;
+    }
+
+    public function setHighlighted(bool $highlighted): void
+    {
+        $this->highlighted = $highlighted;
+    }
+
+    /**
+     * @param string[] $attributes
+     */
+    public function setAttributes(array $attributes): void
+    {
+        $this->attributes = $attributes;
+    }
+
     public function jsonSerialize(): array
     {
         return [
             'type' => $this->getType(),
             'pieceId' => $this->getPieceId(),
             'content' => $this->getContent(),
+            'bookNumber' => $this->getBookNumber(),
+            'chapter' => $this->getChapter(),
+            'verse' => $this->getVerse(),
+            'highlighted' => $this->isHighlighted(),
             'attributes' => $this->getAttributes() ?: \json_decode('{}'),
         ];
+    }
+
+    public static function createLinebreak(): ScripturePiece
+    {
+        return new self(
+            self::TYPE_LINEBREAK,
+            0,
+            null,
+            null,
+            null,
+            '',
+            false,
+            []
+        );
     }
 }

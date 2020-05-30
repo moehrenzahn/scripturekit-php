@@ -93,23 +93,10 @@ class VerseRequest implements JsonSerializable
     private $chapterVerseSeparator;
 
     /**
-     * VerseRequest constructor.
-     *
-     * @param int|null $bookNumber
-     * @param int      $startChapter
-     * @param int      $endChapter
-     * @param int      $collection
-     * @param int      $startVerse
-     * @param int      $endVerse
-     * @param bool     $showAnnotations
-     * @param bool     $showHeadings
-     * @param bool     $inferLinebreaks
      * @param int[]    $highlightedVerses
-     * @param bool     $returnHtml
      * @param string[] $tanachBookNames
      * @param string[] $bibleBookNames
      * @param string[] $quranChapterNames
-     * @param string   $chapterVerseSeparator
      */
     public function __construct(
         ?int $bookNumber,
@@ -147,8 +134,6 @@ class VerseRequest implements JsonSerializable
 
     /**
      * Book number is not applicable for quran verses
-     *
-     * @return int|null
      */
     public function getBookNumber(): ?int
     {
@@ -157,8 +142,6 @@ class VerseRequest implements JsonSerializable
 
     /**
      * @deprecated
-     *
-     * @return int
      */
     public function getChapter(): int
     {
@@ -174,65 +157,41 @@ class VerseRequest implements JsonSerializable
         return range($this->startChapter, $this->endChapter);
     }
 
-    /**
-     * @return int
-     */
     public function getStartChapter(): int
     {
         return $this->startChapter;
     }
 
-    /**
-     * @return int
-     */
     public function getEndChapter(): int
     {
         return $this->endChapter;
     }
 
-    /**
-     * @return int|null
-     */
     public function getStartVerse(): ?int
     {
         return $this->startVerse;
     }
 
-    /**
-     * @return int|null
-     */
     public function getEndVerse(): ?int
     {
         return $this->endVerse;
     }
 
-    /**
-     * @return int
-     */
     public function getCollection(): int
     {
         return $this->collection;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowAnnotations(): bool
     {
         return $this->showAnnotations;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowHeadings(): bool
     {
         return $this->showHeadings;
     }
 
-    /**
-     * @return bool
-     */
     public function isInferLinebreaks(): bool
     {
         return $this->inferLinebreaks;
@@ -246,9 +205,6 @@ class VerseRequest implements JsonSerializable
         return $this->highlightedVerses;
     }
 
-    /**
-     * @return bool
-     */
     public function isReturnHtml(): bool
     {
         return $this->returnHtml;
@@ -278,9 +234,6 @@ class VerseRequest implements JsonSerializable
         return $this->quranChapterNames;
     }
 
-    /**
-     * @return string
-     */
     public function getChapterVerseSeparator(): string
     {
         return $this->chapterVerseSeparator;
@@ -306,5 +259,4 @@ class VerseRequest implements JsonSerializable
             'chapterVerseSeparator' => $this->getChapterVerseSeparator(),
         ];
     }
-
 }

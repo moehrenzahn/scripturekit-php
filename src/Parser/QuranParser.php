@@ -62,7 +62,11 @@ class QuranParser implements ParserInterface
                 )
             );
         }
-        return $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP)[0];
+
+        $piece = $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP)[0];
+        $piece->setChapter($chapter);
+
+        return $piece;
     }
 
     /**
@@ -95,6 +99,7 @@ class QuranParser implements ParserInterface
         }
 
         $pieces = $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP);
+
 
         return $this->insertPieces($pieces, $chapter);
     }
@@ -223,11 +228,17 @@ class QuranParser implements ParserInterface
     {
         $result = [];
         foreach ($pieces as $piece) {
+            $piece->setChapter($chapter);
+
             if ($piece->getPieceId() === 1) {
                 $result[] = new ScripturePiece(
                     ScripturePiece::TYPE_CHAPTER_TITLE,
                     0,
+                    null,
+                    $chapter,
+                    null,
                     $this->referenceRenderer->getChapterName(VerseRequest::COLLECTION_QURAN, $chapter, true),
+                    false,
                     []
                 );
             }
@@ -237,7 +248,11 @@ class QuranParser implements ParserInterface
                 $result[] = new ScripturePiece(
                     ScripturePiece::TYPE_CAPTION,
                     $hizb['id'],
+                    null,
+                    $chapter,
+                    null,
                     $hizb['title'],
+                    false,
                     []
                 );
             }

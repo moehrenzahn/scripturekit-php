@@ -49,14 +49,6 @@ class SefariaParser implements ParserInterface
         39 => "Malachi",
     ];
 
-    /**
-     * @param string $filePath
-     * @param int    $bookNumber
-     * @param int    $chapter
-     * @param int    $verse
-     *
-     * @return ScripturePiece
-     */
     public function loadVerseText(
         string $filePath,
         int $bookNumber,
@@ -72,7 +64,16 @@ class SefariaParser implements ParserInterface
             throw new RuntimeException('Verse is not included in this version.');
         }
 
-        return new ScripturePiece(ScripturePiece::TYPE_CONTENT, $verse, $text, []);
+        return new ScripturePiece(
+            ScripturePiece::TYPE_CONTENT,
+            $verse,
+            $bookNumber,
+            $chapter,
+            $verse,
+            $text,
+            false,
+            []
+        );
     }
 
     /**
@@ -98,10 +99,24 @@ class SefariaParser implements ParserInterface
             $text = $json[self::BOOK_NUMBER_NAME[$bookNumber]]['text'][$chapter-1][$verse-1] ?? null;
 
             if (!$text) {
-                throw new RuntimeException('Verse is not included in this version.');
+                if ($result) {
+                    // previous verses were found, we are probably just at the end of the chapter
+                    break;
+                } else {
+                    throw new RuntimeException('Verse is not included in this version.');
+                }
             }
 
-            $result[] = new ScripturePiece(ScripturePiece::TYPE_CONTENT, $verse, $text, []);
+            $result[] = new ScripturePiece(
+                ScripturePiece::TYPE_CONTENT,
+                $verse,
+                $bookNumber,
+                $chapter,
+                $verse,
+                $text,
+                false,
+                []
+            );
         }
         return $result;
     }
@@ -122,18 +137,27 @@ class SefariaParser implements ParserInterface
         if (!$json) {
             throw new RuntimeException("Could not parse version file at '$filePath'.");
         }
-        $chapter = $json[self::BOOK_NUMBER_NAME[$bookNumber]]['text'][$chapter-1] ?? null;
-        if (!$chapter) {
+        $chapterData = $json[self::BOOK_NUMBER_NAME[$bookNumber]]['text'][$chapter-1] ?? null;
+        if (!$chapterData) {
             throw new RuntimeException('Chapter is not included in this version.');
         }
         $result = [];
-        foreach ($chapter as $key => $text) {
+        foreach ($chapterData as $key => $text) {
             $verse = $key + 1;
             if (!$text) {
                 throw new RuntimeException('Verse is not included in this version.');
             }
 
-            $result[] = new ScripturePiece(ScripturePiece::TYPE_CONTENT, $verse, $text, []);
+            $result[] = new ScripturePiece(
+                ScripturePiece::TYPE_CONTENT,
+                $verse,
+                $bookNumber,
+                $chapter,
+                $verse,
+                $text,
+                false,
+                []
+            );
         }
         return $result;
     }
@@ -197,7 +221,16 @@ class SefariaParser implements ParserInterface
                         break;
                     }
 
-                    $result[] = new ScripturePiece(ScripturePiece::TYPE_CONTENT, $verse, $text, []);
+                    $result[] = new ScripturePiece(
+                        ScripturePiece::TYPE_CONTENT,
+                        $verse,
+                        $bookNumber,
+                        $chapter,
+                        $verse,
+                        $text,
+                        false,
+                        []
+                    );
                 }
             }
         }
