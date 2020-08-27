@@ -63,7 +63,7 @@ class VerseRequest implements JsonSerializable
     private $inferLinebreaks;
 
     /**
-     * @var int[]
+     * @var VersePosition[]
      */
     private $highlightedVerses;
 
@@ -93,7 +93,7 @@ class VerseRequest implements JsonSerializable
     private $chapterVerseSeparator;
 
     /**
-     * @param int[]    $highlightedVerses
+     * @param VersePosition[]    $highlightedVerses
      * @param string[] $tanachBookNames
      * @param string[] $bibleBookNames
      * @param string[] $quranChapterNames
@@ -198,7 +198,7 @@ class VerseRequest implements JsonSerializable
     }
 
     /**
-     * @return int[]
+     * @return VersePosition[]
      */
     public function getHighlightedVerses(): array
     {

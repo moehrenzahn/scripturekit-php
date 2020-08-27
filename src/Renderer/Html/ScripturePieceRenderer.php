@@ -36,7 +36,18 @@ class ScripturePieceRenderer implements ScripturePieceRendererInterface
                         __DIR__ . '/../../Template/ScripturePiece/Annotation.phtml' : '';
                     break;
                 case ScripturePiece::TYPE_CONTENT:
-                    if (in_array($piece->getPieceId(), $verseRequest->getHighlightedVerses())) {
+                    $isHighlighted = false;
+                    foreach ($verseRequest->getHighlightedVerses() as $versePosition) {
+                        if (
+                            $versePosition->getBook() === $piece->getBookNumber()
+                            && $versePosition->getChapter() === $piece->getChapter()
+                            && $versePosition->getVerse() === $piece->getVerse()
+                        ) {
+                            $isHighlighted = true;
+                            break;
+                        }
+                    }
+                    if ($isHighlighted) {
                         $template = __DIR__ . '/../../Template/ScripturePiece/Highlight.phtml';
                     } else {
                         $template = __DIR__ . '/../../Template/ScripturePiece/Default.phtml';

@@ -124,6 +124,8 @@ $requestBuilder->setQuranChapterNames(\Moehrenzahn\ScriptureKit\Util\QuranChapte
 
 ## Testing
 
+ScriptureKit contains a non-exhaustive suite of PHPUnit tests. You can execute the tests via the projects makefile:
+
 `make phpunit`
 
 ## Author

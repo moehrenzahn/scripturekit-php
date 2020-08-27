@@ -2,6 +2,7 @@
 
 namespace Moehrenzahn\ScriptureKit\Test;
 
+use Moehrenzahn\ScriptureKit\Data\VersePosition;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Data\Version;
 use Moehrenzahn\ScriptureKit\Service;
@@ -20,7 +21,7 @@ class ServiceIntegrationTest extends TestCase
                 'book' => 45,
                 'chapter' => 1,
                 'verses' => [1,2],
-                'highlightedVerses' => [2],
+                'highlightedVerses' => [new VersePosition(45, 1, 2)],
                 'returnHtml' => false,
                 'expectedLongReference' => 'Romans 1:1–2',
                 'expectedText' => 'Paul, a servant of Jesus Christ, called to be an apostle, set apart for the gospel of God, which he promised before through his prophets in the holy scriptures.'
@@ -32,7 +33,7 @@ class ServiceIntegrationTest extends TestCase
                 'book' => 45,
                 'chapter' => 1,
                 'verses' => [1,2],
-                'highlightedVerses' => [2],
+                'highlightedVerses' => [new VersePosition(45, 1, 2)],
                 'returnHtml' => true,
                 'expectedLongReference' => 'Romans 1:1–2',
                 'expectedText' => '<p>
@@ -53,7 +54,7 @@ class ServiceIntegrationTest extends TestCase
                 'book' => null,
                 'chapter' => 1,
                 'verses' => [2,3],
-                'highlightedVerses' => [2],
+                'highlightedVerses' => [new VersePosition(null, 1, 2)],
                 'returnHtml' => false,
                 'expectedLongReference' => 'Al-Fatihah (Surah 1) 2–3',
                 'expectedText' => 'Praise belongs to God, the Lord of all Being, the All-merciful, the All-compassionate.'
@@ -65,7 +66,7 @@ class ServiceIntegrationTest extends TestCase
                 'book' => null,
                 'chapter' => 1,
                 'verses' => [2,3],
-                'highlightedVerses' => [2],
+                'highlightedVerses' => [new VersePosition(null, 1, 2)],
                 'returnHtml' => true,
                 'expectedLongReference' => 'Al-Fatihah <span class=\'name-alt\'>(Surah 1)</span> 2–3',
                 'expectedText' => '<p>

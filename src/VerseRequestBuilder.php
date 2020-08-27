@@ -2,6 +2,7 @@
 
 namespace Moehrenzahn\ScriptureKit;
 
+use Moehrenzahn\ScriptureKit\Data\VersePosition;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
 use Moehrenzahn\ScriptureKit\Util\BibleBookNames;
 use Moehrenzahn\ScriptureKit\Util\QuranChapterNames;
@@ -61,7 +62,7 @@ class VerseRequestBuilder
     private $inferLinebreaks = true;
 
     /**
-     * @var int[]
+     * @var VersePosition[]
      */
     private $highlightedVerses = [];
 
@@ -106,15 +107,17 @@ class VerseRequestBuilder
         ?int $endVerse = null,
         ?int $endChapter = null
     ) {
-        if (!in_array(
-            $collection,
-            [
-                VerseRequest::COLLECTION_QURAN,
-                VerseRequest::COLLECTION_TANAKH,
-                VerseRequest::COLLECTION_OT,
-                VerseRequest::COLLECTION_NT,
-            ]
-        )) {
+        if (
+            !in_array(
+                $collection,
+                [
+                    VerseRequest::COLLECTION_QURAN,
+                    VerseRequest::COLLECTION_TANAKH,
+                    VerseRequest::COLLECTION_OT,
+                    VerseRequest::COLLECTION_NT,
+                ]
+            )
+        ) {
             throw new RuntimeException('Invalid collection specified.');
         }
 
@@ -169,7 +172,7 @@ class VerseRequestBuilder
     }
 
     /**
-     * @param int[] $highlightedVerses
+     * @param VersePosition[] $highlightedVerses
      */
     public function setHighlightedVerses(array $highlightedVerses): void
     {

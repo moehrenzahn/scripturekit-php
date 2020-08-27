@@ -4,6 +4,11 @@ namespace Moehrenzahn\ScriptureKit\Data;
 
 use JsonSerializable;
 
+/**
+ * Class VerseData
+ *
+ * Represents a set of verses including all information needed to render the verses and their reference
+ */
 class VerseData implements JsonSerializable
 {
     /**

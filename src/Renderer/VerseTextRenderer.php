@@ -123,8 +123,14 @@ class VerseTextRenderer implements VerseTextRendererInterface
     private function addHighlights(array $pieces, VerseRequest $request): array
     {
         foreach ($pieces as $piece) {
-            if (in_array($piece->getVerse(), $request->getHighlightedVerses())) {
-                $piece->setHighlighted(true);
+            foreach ($request->getHighlightedVerses() as $versePosition) {
+                if (
+                    $versePosition->getBook() === $piece->getBookNumber()
+                    && $versePosition->getChapter() === $piece->getChapter()
+                    && $versePosition->getVerse() === $piece->getVerse()
+                ) {
+                    $piece->setHighlighted(true);
+                }
             }
         }
 
