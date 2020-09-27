@@ -17,80 +17,27 @@ class VerseRequest implements JsonSerializable
     const COLLECTION_NT = 2;
     const COLLECTION_QURAN = 3;
 
-    /**
-     * @var int|null
-     */
-    private $bookNumber;
-
-    /**
-     * @var int
-     */
-    private $startChapter;
-
-    /**
-     * @var int
-     */
-    private $endChapter;
-
-    /**
-     * @var int
-     */
-    private $collection;
-
-    /**
-     * @var ?int
-     */
-    private $startVerse;
-
-    /**
-     * @var ?int
-     */
-    private $endVerse;
-
-    /**
-     * @var bool
-     */
-    private $showAnnotations;
-
-    /**
-     * @var bool
-     */
-    private $showHeadings;
-
-    /**
-     * @var bool
-     */
-    private $inferLinebreaks;
-
-    /**
-     * @var VersePosition[]
-     */
-    private $highlightedVerses;
-
-    /**
-     * @var bool
-     */
-    private $returnHtml;
-
+    private ?int $bookNumber;
+    private int $startChapter;
+    private int $endChapter;
+    private int $collection;
+    private ?int $startVerse;
+    private ?int $endVerse;
+    private bool $showAnnotations;
+    private bool $showHeadings;
+    private bool $inferLinebreaks;
+    private array $highlightedVerses;
+    private bool $returnHtml;
+    private array $tanachBookNames;
     /**
      * @var string[]
      */
-    private $tanachBookNames;
-
+    private array $bibleBookNames;
     /**
      * @var string[]
      */
-    private $bibleBookNames;
-
-    /**
-     * @var string[]
-     */
-    private $quranChapterNames;
-
-    /**
-     * @var string
-     */
-    private $chapterVerseSeparator;
+    private array $quranChapterNames;
+    private string $chapterVerseSeparator;
 
     /**
      * @param VersePosition[]    $highlightedVerses

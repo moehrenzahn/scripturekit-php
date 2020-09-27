@@ -4,20 +4,11 @@ namespace Moehrenzahn\ScriptureKit\Parser;
 
 use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
 use Moehrenzahn\ScriptureKit\Data\VerseRequest;
-use Moehrenzahn\ScriptureKit\Renderer\Names;
 use Moehrenzahn\ScriptureKit\Renderer\ReferenceRendererInterface;
-use Moehrenzahn\ScriptureKit\VerseRequestBuilder;
 use RuntimeException;
-use SimpleXMLElement;
 
-/**
- * Class QuranParser
- *
- * @package Application\Model\Parser
- */
 class QuranParser implements ParserInterface
 {
-
     const TYPE_MAP = [
         'Verse' => ScripturePiece::TYPE_CONTENT,
     ];
@@ -26,15 +17,9 @@ class QuranParser implements ParserInterface
      * @var string[][]
      */
     private $hizb;
-    /**
-     * @var XMLParser
-     */
-    private $xmlParser;
 
-    /**
-     * @var ReferenceRendererInterface
-     */
-    private $referenceRenderer;
+    private XMLParser $xmlParser;
+    private ReferenceRendererInterface $referenceRenderer;
 
     public function __construct(XMLParser $xmlParser, ReferenceRendererInterface $referenceRenderer)
     {
@@ -64,6 +49,7 @@ class QuranParser implements ParserInterface
         }
 
         $piece = $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP)[0];
+        $piece->setPieceId("quran-{$piece->getType()}-$chapter-{$piece->getVerse()}");
         $piece->setChapter($chapter);
 
         return $piece;
@@ -99,7 +85,6 @@ class QuranParser implements ParserInterface
         }
 
         $pieces = $this->xmlParser->convertNodes($xmlElements, 'VerseID', self::TYPE_MAP);
-
 
         return $this->insertPieces($pieces, $chapter);
     }
@@ -220,20 +205,21 @@ class QuranParser implements ParserInterface
     }
 
     /**
-     * @param ScripturePiece[] $pieces
+     * @param ScripturePiece[] $pieces  Unfinished, raw XMLParser pieces
      * @param int              $chapter
-     * @return ScripturePiece[]
+     * @return ScripturePiece[]         Enriched pieces
      */
     private function insertPieces(array $pieces, int $chapter): array
     {
         $result = [];
         foreach ($pieces as $piece) {
+            $piece->setPieceId("quran-{$piece->getType()}-$chapter-{$piece->getVerse()}");
             $piece->setChapter($chapter);
 
-            if ($piece->getPieceId() === 1) {
+            if ($piece->getVerse() === 1) {
                 $result[] = new ScripturePiece(
                     ScripturePiece::TYPE_CHAPTER_TITLE,
-                    0,
+                    'quran-' . ScripturePiece::TYPE_CHAPTER_TITLE . "-quran-$chapter",
                     null,
                     $chapter,
                     null,
@@ -243,11 +229,11 @@ class QuranParser implements ParserInterface
                 );
             }
 
-            $hizb = $this->hizb[$chapter . ':' . $piece->getPieceId()] ?? null;
+            $hizb = $this->hizb[$chapter . ':' . $piece->getVerse()] ?? null;
             if ($hizb) {
                 $result[] = new ScripturePiece(
                     ScripturePiece::TYPE_CAPTION,
-                    $hizb['id'],
+                    'quran-' . ScripturePiece::TYPE_CAPTION . '-hizb-' . $hizb['id'],
                     null,
                     $chapter,
                     null,

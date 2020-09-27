@@ -7,25 +7,13 @@ namespace Moehrenzahn\ScriptureKit\Data;
  */
 class DetailedVersion
 {
-    /**
-     * @var Version
-     */
-    private $version;
-
-    /**
-     * @var string
-     */
-    private $title;
-
-    /**
-     * @var string
-     */
-    private $languageCode;
-
+    private Version $version;
+    private string $title;
+    private string $languageCode;
     /**
      * @var string[]
      */
-    private $details;
+    private array $details;
 
     /**
      * RenderedVersion constructor.
@@ -43,25 +31,16 @@ class DetailedVersion
         $this->details = $details;
     }
 
-    /**
-     * @return Version
-     */
     public function getVersion(): Version
     {
         return $this->version;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguageCode(): string
     {
         return $this->languageCode;

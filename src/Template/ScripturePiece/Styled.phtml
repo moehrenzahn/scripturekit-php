@@ -4,7 +4,7 @@ use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
 ?>
 <span
     class="versetext-styled <?php echo implode(' ', $view->getAttributes()); ?>"
-    data-versenumber="<?php echo $view->getPieceId(); ?>"
+    data-versenumber="<?php echo $view->getVerse(); ?>"
     style="<?php echo implode('; ', $view->getAttributes()); ?>">
     <?php echo $view->getContent(); ?>
 </span>

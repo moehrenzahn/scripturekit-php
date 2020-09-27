@@ -7,50 +7,18 @@ namespace Moehrenzahn\ScriptureKit\Data;
  */
 class RenderedVerse
 {
-    /**
-     * @var VerseRequest
-     */
-    private $verseRequest;
-
-    /**
-     * @var Version
-     */
-    private $version;
-
-    /**
-     * @var string
-     */
-    private $bookName;
-
-    /**
-     * @var string
-     */
-    private $chapterName;
-
-    /**
-     * @var string
-     */
-    private $text;
-
-    /**
-     * @var string
-     */
-    private $compactReference;
-
-    /**
-     * @var string
-     */
-    private $reference;
-
-    /**
-     * @var string
-     */
-    private $fullReference;
-
+    private VerseRequest $verseRequest;
+    private Version $version;
+    private string $bookName;
+    private string $chapterName;
+    private string $text;
+    private string $compactReference;
+    private string $reference;
+    private string $fullReference;
     /**
      * @var string[]
      */
-    private $errors;
+    private array $errors;
 
     /**
      * RenderedVerse constructor.

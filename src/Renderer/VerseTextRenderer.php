@@ -14,23 +14,9 @@ class VerseTextRenderer implements VerseTextRendererInterface
         'Α','α','ε','Η','η','Ι',
         'ι','Ο','ο','υ','Ω','ω',
     ];
+    private ParserInterface $parser;
+    private ScripturePieceRendererInterface $scripturePieceRenderer;
 
-    /**
-     * @var ParserInterface
-     */
-    private $parser;
-
-    /**
-     * @var ScripturePieceRendererInterface
-     */
-    private $scripturePieceRenderer;
-
-    /**
-     * VerseTextRenderer constructor.
-     *
-     * @param ParserInterface                 $parser
-     * @param ScripturePieceRendererInterface $scripturePieceRenderer
-     */
     public function __construct(ParserInterface $parser, ScripturePieceRendererInterface $scripturePieceRenderer)
     {
         $this->parser = $parser;
@@ -150,7 +136,9 @@ class VerseTextRenderer implements VerseTextRendererInterface
             /** @var ScripturePiece $piece */
             $piece = array_shift($pieces);
             if ($this->startsSentence($piece) && !$sentenceInProgress) {
-                $result[] = ScripturePiece::createLinebreak();
+                $result[] = ScripturePiece::createLinebreak(
+                    ScripturePiece::TYPE_LINEBREAK . '-' . $piece->getPieceId()
+                );
                 $sentenceInProgress = true;
             }
             if ($this->endsSentence($piece)) {
@@ -178,7 +166,6 @@ class VerseTextRenderer implements VerseTextRendererInterface
                 StringHelper::endsWith($content, '׃ ס') ||
                 StringHelper::endsWith($content, '!') ||
                 StringHelper::endsWith($content, 'ن')
-
             );
         } else {
             return false;

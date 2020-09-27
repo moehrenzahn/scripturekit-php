@@ -58,7 +58,8 @@ class ZefaniaParser implements ParserInterface
         }
 
         $piece = $this->convertNodes($xmlElements)[0];
-        $piece->setBookNumber($chapter);
+        $piece->setPieceId("zefania-{$piece->getType()}-$bookNumber-$chapter-{$piece->getVerse()}");
+        $piece->setBookNumber($bookNumber);
         $piece->setChapter($chapter);
 
         return $piece;
@@ -91,6 +92,7 @@ class ZefaniaParser implements ParserInterface
         $pieces = $this->convertNodes($xmlElements);
 
         foreach ($pieces as $piece) {
+            $piece->setPieceId("zefania-{$piece->getType()}-$bookNumber-$chapter-{$piece->getVerse()}");
             $piece->setBookNumber($bookNumber);
             $piece->setChapter($chapter);
         }
@@ -121,6 +123,7 @@ class ZefaniaParser implements ParserInterface
         $pieces = $this->convertNodes($xmlElements);
 
         foreach ($pieces as $piece) {
+            $piece->setPieceId("zefania-{$piece->getType()}-$bookNumber-$chapter-{$piece->getVerse()}");
             $piece->setBookNumber($bookNumber);
             $piece->setChapter($chapter);
         }

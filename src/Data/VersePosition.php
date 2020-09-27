@@ -11,20 +11,9 @@ use JsonSerializable;
  */
 class VersePosition implements JsonSerializable
 {
-    /**
-     * @var ?int
-     */
-    private $book;
-
-    /**
-     * @var int
-     */
-    private $chapter;
-
-    /**
-     * @var int
-     */
-    private $verse;
+    private ?int $book;
+    private int $chapter;
+    private int $verse;
 
     public function __construct(?int $book, int $chapter, int $verse)
     {

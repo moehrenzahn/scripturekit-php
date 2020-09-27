@@ -66,7 +66,7 @@ class SefariaParser implements ParserInterface
 
         return new ScripturePiece(
             ScripturePiece::TYPE_CONTENT,
-            $verse,
+            "sefaria-" . ScripturePiece::TYPE_CONTENT . "$bookNumber-$chapter-$verse",
             $bookNumber,
             $chapter,
             $verse,
@@ -109,7 +109,7 @@ class SefariaParser implements ParserInterface
 
             $result[] = new ScripturePiece(
                 ScripturePiece::TYPE_CONTENT,
-                $verse,
+                "sefaria-" . ScripturePiece::TYPE_CONTENT . "$bookNumber-$chapter-$verse",
                 $bookNumber,
                 $chapter,
                 $verse,
@@ -150,7 +150,7 @@ class SefariaParser implements ParserInterface
 
             $result[] = new ScripturePiece(
                 ScripturePiece::TYPE_CONTENT,
-                $verse,
+                "sefaria-" . ScripturePiece::TYPE_CONTENT . "$bookNumber-$chapter-$verse",
                 $bookNumber,
                 $chapter,
                 $verse,
@@ -223,7 +223,7 @@ class SefariaParser implements ParserInterface
 
                     $result[] = new ScripturePiece(
                         ScripturePiece::TYPE_CONTENT,
-                        $verse,
+                        "sefaria-" . ScripturePiece::TYPE_CONTENT . "$bookNumber-$chapter-$verse",
                         $bookNumber,
                         $chapter,
                         $verse,

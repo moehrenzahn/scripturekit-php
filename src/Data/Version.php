@@ -19,24 +19,17 @@ class Version implements JsonSerializable
 
     /**
      * The title of the version
-     *
-     * @var string
      */
-    private $name;
-
+    private string $name;
     /**
      * The path to the xml or json file with the version source
-     *
-     * @var string
      */
-    private $filePath;
+    private string $filePath;
 
     /**
      * The type of version, see self::TYPE_*
-     *
-     * @var int
      */
-    private $type;
+    private int $type;
 
     /**
      * The collections that are part of the version,
@@ -44,7 +37,7 @@ class Version implements JsonSerializable
      *
      * @var int[]
      */
-    private $availableCollections;
+    private array $availableCollections;
 
     /**
      * Version constructor.

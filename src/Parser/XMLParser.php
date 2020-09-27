@@ -42,7 +42,8 @@ class XMLParser
     }
 
     /**
-     * Warning: This method will not add correct book numbers and chapters to ScripturePiece objects.
+     * Warning: This method will not add correct book numbers, chapters, or unique ids to ScripturePiece objects.
+     * @internal
      *
      * @param SimpleXMLElement[] $xmlElements
      * @param string $idAttributeKey
@@ -71,12 +72,15 @@ class XMLParser
                 $content = StringHelper::trailingCommaToPeriod($content);
             }
 
+            $type = $typeMap[$element->getName()];
+            $verse = (int)$element->attributes()[$idAttributeKey];
+
             $pieces[] = new ScripturePiece(
-                $typeMap[$element->getName()],
-                (int)$element->attributes()[$idAttributeKey],
+                $type,
+                0,
                 null,
                 null,
-                (int)$element->attributes()[$idAttributeKey],
+                $verse,
                 $content,
                 false,
                 $attributes

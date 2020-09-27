@@ -11,50 +11,21 @@ use JsonSerializable;
  */
 class VerseData implements JsonSerializable
 {
-    /**
-     * @var VerseRequest
-     */
-    private $verseRequest;
-
-    /**
-     * @var Version
-     */
-    private $version;
-
-    /**
-     * @var string
-     */
-    private $bookName;
-
-    /**
-     * @var string
-     */
-    private $chapterName;
-
+    private VerseRequest $verseRequest;
+    private Version $version;
+    private string $bookName;
+    private string $chapterName;
     /**
      * @var ScripturePiece[]
      */
-    private $pieces;
-
-    /**
-     * @var string
-     */
-    private $compactReference;
-
-    /**
-     * @var string
-     */
-    private $reference;
-
-    /**
-     * @var string
-     */
-    private $fullReference;
-
+    private array $pieces;
+    private string $compactReference;
+    private string $reference;
+    private string $fullReference;
     /**
      * @var string[]
      */
-    private $errors;
+    private array $errors;
 
     /**
      * RenderedVerse constructor.

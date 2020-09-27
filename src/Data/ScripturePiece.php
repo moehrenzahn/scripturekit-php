@@ -36,52 +36,27 @@ class ScripturePiece implements JsonSerializable
         self::TYPE_CHAPTER_TITLE,
     ];
 
+    private string $type;
     /**
-     * @var string
+     * Unique identifier of the Piece within the given version
      */
-    private $type;
-
-    /**
-     * @var int
-     */
-    private $pieceId;
-
-    /**
-     * @var int|null
-     */
-    private $bookNumber;
-
-    /**
-     * @var int|null
-     */
-    private $chapter;
-
-    /**
-     * @var int|null
-     */
-    private $verse;
-
-    /**
-     * @var string
-     */
-    private $content;
-
-    /**
-     * @var bool
-     */
-    private $highlighted;
-
+    private string $pieceId;
+    private ?int $bookNumber;
+    private ?int $chapter;
+    private ?int $verse;
+    private string $content;
+    private bool $highlighted;
     /**
      * @var string[]
      */
-    private $attributes;
+    private array $attributes;
 
     /**
      * @param string[] $attributes
      */
     public function __construct(
         string $type,
-        int $pieceId,
+        string $pieceId,
         ?int $bookNumber,
         ?int $chapter,
         ?int $verse,
@@ -107,30 +82,21 @@ class ScripturePiece implements JsonSerializable
         return $this->type;
     }
 
-    public function getPieceId(): int
+    public function getPieceId(): string
     {
         return $this->pieceId;
     }
 
-    /**
-     * @return int|null
-     */
     public function getBookNumber(): ?int
     {
         return $this->bookNumber;
     }
 
-    /**
-     * @return int|null
-     */
     public function getChapter(): ?int
     {
         return $this->chapter;
     }
 
-    /**
-     * @return int|null
-     */
     public function getVerse(): ?int
     {
         return $this->verse;
@@ -159,7 +125,7 @@ class ScripturePiece implements JsonSerializable
         $this->type = $type;
     }
 
-    public function setPieceId(int $pieceId): void
+    public function setPieceId(string $pieceId): void
     {
         $this->pieceId = $pieceId;
     }
@@ -211,11 +177,11 @@ class ScripturePiece implements JsonSerializable
         ];
     }
 
-    public static function createLinebreak(): ScripturePiece
+    public static function createLinebreak(string $pieceId): ScripturePiece
     {
         return new self(
             self::TYPE_LINEBREAK,
-            0,
+            $pieceId,
             null,
             null,
             null,

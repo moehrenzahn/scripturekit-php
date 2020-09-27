@@ -4,6 +4,6 @@ use Moehrenzahn\ScriptureKit\Data\ScripturePiece;
 ?>
 <span
     class="highlight <?php echo implode(' ', $view->getAttributes()); ?>"
-    data-versenumber="<?php echo $view->getPieceId(); ?>">
+    data-versenumber="<?php echo $view->getVerse(); ?>">
     <?php echo $view->getContent(); ?>
 </span>
