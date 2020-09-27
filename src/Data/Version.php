@@ -17,31 +17,15 @@ class Version implements JsonSerializable
     public const TYPE_BIBLE = 1;
     public const TYPE_QURAN = 2;
 
-    /**
-     * The title of the version
-     */
+    private string $id;
     private string $name;
-    /**
-     * The path to the xml or json file with the version source
-     */
     private string $filePath;
-
-    /**
-     * The type of version, see self::TYPE_*
-     */
     private int $type;
-
-    /**
-     * The collections that are part of the version,
-     * see Moehrenzahn\ScriptureKit\Data\VerseRequest::COLLECTION_*
-     *
-     * @var int[]
-     */
+    /** @var int[] */
     private array $availableCollections;
 
     /**
-     * Version constructor.
-     *
+     * @param string $id                    Unique identifier of the version
      * @param string $name                  The title of the version
      * @param string $filePath              The path to the xml file with the version source
      * @param int    $type                  The type of version, see self::TYPE_*
@@ -49,15 +33,22 @@ class Version implements JsonSerializable
      *                                      Moehrenzahn\ScriptureKit\Data\VerseRequest::COLLECTION_*
      */
     public function __construct(
+        string $id,
         string $name,
         string $filePath,
         int $type,
         array $availableCollections
     ) {
+        $this->id = $id;
         $this->name = $name;
         $this->filePath = $filePath;
         $this->type = $type;
         $this->availableCollections = $availableCollections;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getName(): string
@@ -86,6 +77,7 @@ class Version implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
+            'id' => $this->getId(),
             'name' => $this->getName(),
             'filePath' => $this->getFilePath(),
             'type' => $this->getType(),

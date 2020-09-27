@@ -146,10 +146,11 @@ class ServiceIntegrationTest extends TestCase
         string $expectedLongReference,
         string $expectedText
     ) {
+        $versionId = 'test123';
         $versionName = 'Test Version Name';
         $versionAvailableCollections = [$collection];
 
-        $version = new Version($versionName, $versionPath, $versionType, $versionAvailableCollections);
+        $version = new Version($versionId, $versionName, $versionPath, $versionType, $versionAvailableCollections);
         $subject = new Service($version);
 
         $verseRequestBuilder = new VerseRequestBuilder($chapter, $collection, $verses[0], $verses[1] ?? null);
@@ -187,10 +188,11 @@ class ServiceIntegrationTest extends TestCase
         string $expectedLongReference,
         string $expectedText
     ) {
+        $versionId = 'test123';
         $versionName = 'Test Version Name';
         $versionAvailableCollections = [$collection];
 
-        $version = new Version($versionName, $versionPath, $versionType, $versionAvailableCollections);
+        $version = new Version($versionId, $versionName, $versionPath, $versionType, $versionAvailableCollections);
         $subject = new Service($version);
 
         $verseRequestBuilder = new VerseRequestBuilder($chapter, $collection, $verses[0], $verses[1] ?? null);
@@ -210,10 +212,11 @@ class ServiceIntegrationTest extends TestCase
      */
     public function testCreateVersion(string $versionPath, int $versionType, string $expectedTitle, string $expectedLanguageCode)
     {
+        $versionId = 'test123';
         $versionName = 'Test Version Name';
         $versionAvailableCollections = [];
 
-        $version = new Version($versionName, $versionPath, $versionType, $versionAvailableCollections);
+        $version = new Version($versionId, $versionName, $versionPath, $versionType, $versionAvailableCollections);
 
         $subject = new Service($version);
 
